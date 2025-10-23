@@ -183,7 +183,7 @@
         
         .table-container {
             width: 100%;
-            overflow-x: auto;
+            overflow-x: hidden; /* Alterado para hidden para desativar rolagem direta */
             border-radius: 10px;
             background: rgba(11, 35, 64, 0.7);
             position: relative;
@@ -194,7 +194,6 @@
                 inset -1px 0 0 rgba(255, 255, 255, 0.05),
                 inset 0 -1px 0 rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.15);
-            /* Removido -webkit-overflow-scrolling para rolagem normal */
         }
         
         .table-container::before {
@@ -437,6 +436,84 @@
         
         .post-btn:active {
             transform: translateY(-1px);
+        }
+        
+        /* BARRA DE ROLAGEM PERSONALIZADA */
+        .scroll-container {
+            width: 100%;
+            position: relative;
+            margin-top: 10px;
+        }
+        
+        .scroll-track {
+            width: 100%;
+            height: 12px;
+            background: rgba(11, 35, 64, 0.7);
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                inset 0 1px 3px rgba(0, 0, 0, 0.4),
+                0 1px 0 rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .scroll-thumb {
+            height: 100%;
+            background: linear-gradient(135deg, #D34AA1, #3A6CD6);
+            border-radius: 10px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            min-width: 40px;
+            cursor: grab;
+            box-shadow: 
+                0 2px 6px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .scroll-thumb:hover {
+            box-shadow: 
+                0 3px 8px rgba(211, 74, 161, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        }
+        
+        .scroll-thumb:active {
+            cursor: grabbing;
+            transform: scale(1.05);
+            box-shadow: 
+                0 4px 10px rgba(211, 74, 161, 0.8),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5);
+        }
+        
+        .scroll-arrows {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+        }
+        
+        .scroll-arrow {
+            background: linear-gradient(135deg, #3A6CD6, #D34AA1);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 4px 12px;
+            font-size: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 2px 5px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+        
+        .scroll-arrow:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 3px 8px rgba(58, 108, 214, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
         }
         
         .footer {
@@ -881,6 +958,17 @@
                     </tbody>
                 </table>
             </div>
+            
+            <!-- BARRA DE ROLAGEM PERSONALIZADA -->
+            <div class="scroll-container">
+                <div class="scroll-track">
+                    <div class="scroll-thumb" id="scrollThumb"></div>
+                </div>
+                <div class="scroll-arrows">
+                    <button class="scroll-arrow" id="scrollLeft">◀</button>
+                    <button class="scroll-arrow" id="scrollRight">▶</button>
+                </div>
+            </div>
         </div>
         
         <div class="footer">
@@ -1005,6 +1093,11 @@
         let currentOrder = '';
         let currentResponsavel = '';
         let currentFuncao = '';
+
+        // Variáveis para controle da barra de rolagem
+        let isDragging = false;
+        let startX;
+        let scrollLeft;
 
         // Atualizar data atual - AGORA busca da aba específica
         async function updateCurrentDate(sheetType = 'analistas') {
@@ -1214,6 +1307,113 @@
             } else {
                 return 'pendente';
             }
+        }
+
+        // FUNÇÕES DA BARRA DE ROLAGEM
+        function initScrollbar() {
+            const scrollThumb = document.getElementById('scrollThumb');
+            const scrollTrack = document.querySelector('.scroll-track');
+            const scrollLeftBtn = document.getElementById('scrollLeft');
+            const scrollRightBtn = document.getElementById('scrollRight');
+            const tableContainer = document.querySelector('.table-container');
+            
+            // Calcular a largura do thumb baseada na proporção do conteúdo
+            const tableWidth = tableContainer.scrollWidth;
+            const containerWidth = tableContainer.clientWidth;
+            const thumbWidth = Math.max((containerWidth / tableWidth) * 100, 10);
+            
+            scrollThumb.style.width = `${thumbWidth}%`;
+            
+            // Eventos para arrastar o thumb
+            scrollThumb.addEventListener('mousedown', startDrag);
+            scrollThumb.addEventListener('touchstart', startDrag);
+            
+            // Eventos para os botões de seta
+            scrollLeftBtn.addEventListener('click', () => scrollTable(-100));
+            scrollRightBtn.addEventListener('click', () => scrollTable(100));
+            
+            // Prevenir arrastar a tabela diretamente
+            tableContainer.addEventListener('mousedown', (e) => e.preventDefault());
+            tableContainer.addEventListener('touchstart', (e) => e.preventDefault());
+        }
+        
+        function startDrag(e) {
+            e.preventDefault();
+            isDragging = true;
+            const scrollThumb = document.getElementById('scrollThumb');
+            const scrollTrack = document.querySelector('.scroll-track');
+            
+            if (e.type === 'mousedown') {
+                startX = e.pageX - scrollThumb.offsetLeft;
+            } else {
+                startX = e.touches[0].pageX - scrollThumb.offsetLeft;
+            }
+            
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('touchmove', drag);
+            document.addEventListener('mouseup', stopDrag);
+            document.addEventListener('touchend', stopDrag);
+            
+            scrollThumb.style.cursor = 'grabbing';
+        }
+        
+        function drag(e) {
+            if (!isDragging) return;
+            e.preventDefault();
+            
+            const scrollThumb = document.getElementById('scrollThumb');
+            const scrollTrack = document.querySelector('.scroll-track');
+            const tableContainer = document.querySelector('.table-container');
+            
+            let x;
+            if (e.type === 'mousemove') {
+                x = e.pageX - startX;
+            } else {
+                x = e.touches[0].pageX - startX;
+            }
+            
+            // Limitar o movimento do thumb dentro do track
+            const maxX = scrollTrack.offsetWidth - scrollThumb.offsetWidth;
+            x = Math.max(0, Math.min(x, maxX));
+            
+            scrollThumb.style.left = `${x}px`;
+            
+            // Calcular a posição de rolagem da tabela
+            const scrollPercentage = x / maxX;
+            const tableScroll = (tableContainer.scrollWidth - tableContainer.clientWidth) * scrollPercentage;
+            
+            tableContainer.scrollLeft = tableScroll;
+        }
+        
+        function stopDrag() {
+            isDragging = false;
+            const scrollThumb = document.getElementById('scrollThumb');
+            scrollThumb.style.cursor = 'grab';
+            
+            document.removeEventListener('mousemove', drag);
+            document.removeEventListener('touchmove', drag);
+            document.removeEventListener('mouseup', stopDrag);
+            document.removeEventListener('touchend', stopDrag);
+        }
+        
+        function scrollTable(amount) {
+            const tableContainer = document.querySelector('.table-container');
+            tableContainer.scrollLeft += amount;
+            
+            // Atualizar a posição do thumb após rolagem
+            updateThumbPosition();
+        }
+        
+        function updateThumbPosition() {
+            const tableContainer = document.querySelector('.table-container');
+            const scrollThumb = document.getElementById('scrollThumb');
+            const scrollTrack = document.querySelector('.scroll-track');
+            
+            const scrollPercentage = tableContainer.scrollLeft / (tableContainer.scrollWidth - tableContainer.clientWidth);
+            const maxX = scrollTrack.offsetWidth - scrollThumb.offsetWidth;
+            const thumbX = scrollPercentage * maxX;
+            
+            scrollThumb.style.left = `${thumbX}px`;
         }
 
         // FUNÇÕES DO MODAL
@@ -1462,7 +1662,9 @@
 
         // Carregar dados dos analistas por padrão
         loadData('analistas');
+        
+        // Inicializar a barra de rolagem após o carregamento
+        setTimeout(initScrollbar, 100);
     </script>
 </body>
 </html>
-
