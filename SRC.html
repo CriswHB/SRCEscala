@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+otimiza para o celular, eu quero que dê para ver tudo pelo celular, a tabela toda, o fundo etc.<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -11,26 +11,15 @@
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
-        /* ----- MUDANÇAS APLICADAS AQUI ----- */
-        html {
-            overflow: hidden; /* Garante que o elemento raiz não tenha scroll */
-            height: 100%;
-        }
         
         body {
-            /* Impede o scroll vertical e horizontal no corpo da página */
-            overflow-y: hidden; 
-            overflow-x: hidden; 
-            
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             background: #0B2340;
-            padding: 10px;
+            padding: 20px;
         }
-        /* ---------------------------------- */
         
         .background-animation {
             position: fixed;
@@ -66,8 +55,8 @@
             width: 100%;
             max-width: 1100px;
             background: rgba(11, 35, 64, 0.85);
-            border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+            border-radius: 25px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
@@ -76,7 +65,7 @@
         .header {
             background: transparent;
             color: white;
-            padding: 20px 15px 5px 15px;
+            padding: 35px 25px 10px 25px;
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -87,8 +76,8 @@
             position: absolute;
             top: 40%;
             transform: translateY(-50%);
-            width: 60px;
-            height: 60px;
+            width: 120px;
+            height: 120px;
             background: url('https://i.imgur.com/ez62Y0j.png') center/contain no-repeat;
             opacity: 0.08;
             filter: grayscale(100%) brightness(150%) contrast(150%);
@@ -96,11 +85,11 @@
         }
 
         .coat-of-arms-left {
-            left: 10px;
+            left: 30px;
         }
 
         .coat-of-arms-right {
-            right: 10px;
+            right: 30px;
         }
 
         @keyframes coatGlowFade {
@@ -109,17 +98,17 @@
         }
         
         .hamster-container {
-            width: 100px;
-            height: 100px;
-            margin: 0 auto 15px;
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 25px;
             border-radius: 50%;
             background: linear-gradient(to right, #D34AA1, #3A6CD6);
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
             animation: containerGlow 4s ease-in-out infinite alternate;
             position: relative;
             z-index: 2;
@@ -127,19 +116,19 @@
         
         @keyframes containerGlow {
             0% { 
-                box-shadow: 0 8px 20px rgba(211, 74, 161, 0.5);
+                box-shadow: 0 12px 30px rgba(211, 74, 161, 0.5);
                 transform: scale(1);
             }
             100% { 
-                box-shadow: 0 8px 25px rgba(58, 108, 214, 0.7);
+                box-shadow: 0 12px 35px rgba(58, 108, 214, 0.7);
                 transform: scale(1.02);
             }
         }
         
         .hamster {
             background: url('https://i.imgur.com/ePdBk9k.png') center/cover no-repeat;
-            width: 85px;
-            height: 85px;
+            width: 140px;
+            height: 140px;
             border-radius: 50%;
             animation: 
                 hamsterDance 6s ease-in-out infinite,
@@ -156,7 +145,7 @@
                 border-radius: 50%;
             }
             25% { 
-                transform: translateY(-10px) rotate(5deg) scale(1.05);
+                transform: translateY(-15px) rotate(5deg) scale(1.05);
                 border-radius: 60% 40% 70% 30% / 40% 60% 30% 70%;
             }
             50% { 
@@ -164,7 +153,7 @@
                 border-radius: 40% 60% 30% 70% / 60% 40% 70% 30%;
             }
             75% { 
-                transform: translateY(-8px) rotate(2deg) scale(1.03);
+                transform: translateY(-10px) rotate(2deg) scale(1.03);
                 border-radius: 70% 30% 60% 40% / 30% 70% 40% 60%;
             }
         }
@@ -176,57 +165,56 @@
         
         @keyframes hamsterBounce {
             0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-15px); }
-            60% { transform: translateY(-8px); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
         }
         
         h1 {
-            font-size: 24px;
-            margin-bottom: 8px;
+            font-size: 36px;
+            margin-bottom: 10px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
             color: white;
             font-weight: 700;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
             text-align: center;
             position: relative;
             z-index: 2;
         }
         
         .date {
-            font-size: 16px;
+            font-size: 20px;
             opacity: 0.9;
             color: white;
             font-weight: 500;
             letter-spacing: 0.5px;
             position: relative;
             z-index: 2;
-            margin-bottom: 20px;
+            margin-bottom: 35px;
             font-style: normal;
         }
         
         .header-action-buttons {
             display: flex;
             justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
-            margin-bottom: 5px;
+            gap: 15px;
+            margin-top: 35px;
+            margin-bottom: 10px;
             position: relative;
             z-index: 2;
-            flex-wrap: wrap;
         }
         
         .header-btn {
             background: linear-gradient(135deg, #3A6CD6, #D34AA1);
             color: white;
             border: none;
-            border-radius: 20px;
-            padding: 8px 15px;
-            font-size: 13px;
+            border-radius: 30px;
+            padding: 10px 20px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 
-                0 3px 8px rgba(0, 0, 0, 0.4),
+                0 4px 12px rgba(0, 0, 0, 0.4),
                 inset 0 1px 0 rgba(255, 255, 255, 0.3);
             letter-spacing: 0.5px;
             text-transform: uppercase;
@@ -235,7 +223,7 @@
         .header-btn:hover {
             transform: translateY(-2px);
             box-shadow: 
-                0 5px 12px rgba(58, 108, 214, 0.8),
+                0 6px 15px rgba(58, 108, 214, 0.8),
                 inset 0 1px 0 rgba(255, 255, 255, 0.4);
         }
 
@@ -246,29 +234,28 @@
 
         .header-btn.active {
             background: linear-gradient(135deg, #D34AA1, #3A6CD6);
-            box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0.3), 0 3px 8px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.3), 0 4px 12px rgba(0, 0, 0, 0.6);
             border: 2px solid white;
         }
         
         .content {
-            padding: 20px 15px;
+            padding: 35px;
             position: relative;
         }
         
         .table-container {
             width: 100%;
-            overflow-x: auto; /* Permite o scroll horizontal (arrasto pro lado) */
-            border-radius: 12px;
+            overflow: hidden;
+            border-radius: 18px;
             background: rgba(11, 35, 64, 0.7);
             position: relative;
             box-shadow: 
-                0 8px 20px rgba(0, 0, 0, 0.5),
+                0 10px 30px rgba(0, 0, 0, 0.5),
                 inset 0 1px 0 rgba(255, 255, 255, 0.1),
                 inset 1px 0 0 rgba(255, 255, 255, 0.05),
                 inset -1px 0 0 rgba(255, 255, 255, 0.05),
                 inset 0 -1px 0 rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.15);
-            -webkit-overflow-scrolling: touch;
         }
         
         .table-container::before {
@@ -279,10 +266,10 @@
             right: -2px;
             bottom: -2px;
             background: linear-gradient(45deg, #D34AA1, #3A6CD6, #D34AA1);
-            border-radius: 14px;
+            border-radius: 20px;
             z-index: -1;
             opacity: 0.3;
-            filter: blur(8px);
+            filter: blur(10px);
             animation: borderGlow 3s ease-in-out infinite alternate;
         }
         
@@ -296,7 +283,6 @@
             border-collapse: collapse;
             position: relative;
             z-index: 1;
-            min-width: 600px; /* Garante que a tabela não quebre em telas pequenas */
         }
         
         .function-table thead {
@@ -304,7 +290,7 @@
             color: white;
             position: relative;
             box-shadow: 
-                0 2px 8px rgba(0, 0, 0, 0.3),
+                0 2px 10px rgba(0, 0, 0, 0.3),
                 inset 0 1px 0 rgba(255, 255, 255, 0.15);
         }
         
@@ -319,22 +305,22 @@
         }
         
         .function-table th {
-            padding: 12px 8px;
+            padding: 20px;
             text-align: center;
             font-weight: 600;
-            font-size: 14px;
-            letter-spacing: 0.5px;
+            font-size: 18px;
+            letter-spacing: 0.8px;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
             position: relative;
             box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
         }
         
         .function-table th:first-child {
-            border-top-left-radius: 12px;
+            border-top-left-radius: 18px;
         }
         
         .function-table th:last-child {
-            border-top-right-radius: 12px;
+            border-top-right-radius: 18px;
         }
         
         .function-table tbody tr {
@@ -352,7 +338,7 @@
             background: rgba(15, 42, 78, 0.95);
             transform: translateY(-2px);
             box-shadow: 
-                0 4px 12px rgba(0, 0, 0, 0.4),
+                0 4px 15px rgba(0, 0, 0, 0.4),
                 inset 0 0 0 1px rgba(255, 255, 255, 0.1);
         }
         
@@ -361,8 +347,8 @@
         }
         
         .function-table td {
-            padding: 12px 8px;
-            font-size: 14px;
+            padding: 20px;
+            font-size: 17px;
             position: relative;
             text-align: center;
             color: white;
@@ -375,23 +361,23 @@
         
         .order-code {
             font-weight: 700;
-            font-size: 16px;
+            font-size: 20px;
             color: white;
-            text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
             background: linear-gradient(135deg, rgba(211, 74, 161, 0.15), rgba(58, 108, 214, 0.15));
-            padding: 6px 10px;
-            border-radius: 6px;
+            padding: 8px 12px;
+            border-radius: 8px;
             display: inline-block;
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 
-                0 2px 4px rgba(0, 0, 0, 0.2),
+                0 2px 5px rgba(0, 0, 0, 0.2),
                 inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
         
         .function-name {
             font-weight: 600;
             color: white;
-            font-size: 14px;
+            font-size: 18px;
             letter-spacing: 0.5px;
             text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
         }
@@ -399,27 +385,27 @@
         .person-name {
             color: white;
             font-weight: 500;
-            font-size: 14px;
+            font-size: 17px;
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
         }
 
         .data-cell {
             color: #ccc;
             font-style: normal;
-            min-width: 90px;
-            padding: 10px 6px;
+            min-width: 120px;
+            padding: 15px 10px;
             word-break: keep-all;
             white-space: nowrap;
         }
         
         .status {
             font-weight: 700;
-            font-size: 12px;
-            padding: 8px 12px;
-            border-radius: 20px;
+            font-size: 15px;
+            padding: 12px 20px;
+            border-radius: 30px;
             text-align: center;
             display: inline-block;
-            min-width: 100px;
+            min-width: 130px;
             transition: all 0.4s ease;
             text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
             position: relative;
@@ -428,14 +414,14 @@
             backdrop-filter: blur(10px);
             border: 1px solid; 
             box-shadow: 
-                0 4px 12px rgba(0, 0, 0, 0.25),
+                0 6px 20px rgba(0, 0, 0, 0.25),
                 inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
         
         .status:hover {
             transform: translateY(-2px) scale(1.03);
             box-shadow: 
-                0 6px 18px rgba(0, 0, 0, 0.35),
+                0 8px 25px rgba(0, 0, 0, 0.35),
                 inset 0 1px 0 rgba(255, 255, 255, 0.3);
         }
         
@@ -445,7 +431,7 @@
             border-color: #8b0000; 
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
             box-shadow: 
-                0 4px 12px rgba(165, 42, 42, 0.2),
+                0 6px 20px rgba(165, 42, 42, 0.2),
                 inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
         
@@ -455,13 +441,13 @@
             border-color: #5f6a7a;
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4); 
             box-shadow: 
-                0 4px 12px rgba(112, 128, 144, 0.2),
+                0 6px 20px rgba(112, 128, 144, 0.2),
                 inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
 
         .pendente:hover {
             box-shadow: 
-                0 6px 18px rgba(112, 128, 144, 0.3),
+                0 8px 25px rgba(112, 128, 144, 0.3),
                 inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
         
@@ -471,7 +457,7 @@
             border-color: #22663d;
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
             box-shadow: 
-                0 4px 12px rgba(46, 139, 87, 0.2),
+                0 6px 20px rgba(46, 139, 87, 0.2),
                 inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
         
@@ -479,25 +465,25 @@
             background: linear-gradient(to right, #D34AA1, #3A6CD6);
             color: white;
             border: none;
-            border-radius: 40px;
-            padding: 8px 15px;
-            font-size: 13px;
+            border-radius: 50px;
+            padding: 10px 20px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 
-                0 4px 12px rgba(211, 74, 161, 0.4),
+                0 5px 15px rgba(211, 74, 161, 0.4),
                 inset 0 1px 0 rgba(255, 255, 255, 0.2);
             letter-spacing: 0.5px;
             position: relative;
             overflow: hidden;
-            min-width: 100px;
+            min-width: 120px;
         }
         
         .post-btn:hover {
             transform: translateY(-3px);
             box-shadow: 
-                0 6px 15px rgba(211, 74, 161, 0.6),
+                0 8px 20px rgba(211, 74, 161, 0.6),
                 inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
         
@@ -507,9 +493,9 @@
         
         .footer {
             text-align: center;
-            padding: 15px;
+            padding: 25px;
             color: white;
-            font-size: 13px;
+            font-size: 15px;
             background: transparent;
             letter-spacing: 0.5px;
         }
@@ -517,27 +503,27 @@
         .loading {
             text-align: center;
             color: white;
-            padding: 15px;
-            font-size: 16px;
+            padding: 20px;
+            font-size: 18px;
         }
 
         .error {
             text-align: center;
             color: #ff6b6b;
-            padding: 15px;
-            font-size: 14px;
+            padding: 20px;
+            font-size: 16px;
         }
         
         .retry-btn {
             background: linear-gradient(135deg, #3A6CD6, #D34AA1);
             color: white;
             border: none;
-            border-radius: 20px;
-            padding: 8px 15px;
-            font-size: 13px;
+            border-radius: 30px;
+            padding: 10px 20px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
-            margin-top: 8px;
+            margin-top: 10px;
             transition: all 0.3s ease;
         }
         
@@ -558,53 +544,49 @@
             align-items: center;
             z-index: 1000;
             backdrop-filter: blur(5px);
-            padding: 15px;
         }
 
         .modal-content {
             background: linear-gradient(135deg, #1A2F4D, #22385C);
-            border-radius: 15px;
-            padding: 20px;
-            width: 100%;
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
             max-width: 500px;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
             border: 1px solid rgba(255, 255, 255, 0.1);
             position: relative;
-            max-height: 90vh;
-            overflow-y: auto;
         }
 
         .modal-header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .modal-header h2 {
             color: white;
-            font-size: 20px;
-            margin-bottom: 8px;
+            font-size: 24px;
+            margin-bottom: 10px;
         }
 
         .modal-header p {
             color: #ccc;
-            font-size: 14px;
+            font-size: 16px;
         }
 
         .choice-buttons {
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 15px;
+            margin-bottom: 25px;
             justify-content: center;
-            flex-wrap: wrap;
         }
 
         .choice-btn {
             background: linear-gradient(135deg, #3A6CD6, #D34AA1);
             color: white;
             border: none;
-            border-radius: 20px;
-            padding: 10px 20px;
-            font-size: 14px;
+            border-radius: 25px;
+            padding: 12px 25px;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -614,12 +596,12 @@
 
         .choice-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(58, 108, 214, 0.4);
+            box-shadow: 0 8px 20px rgba(58, 108, 214, 0.4);
         }
 
         .choice-btn.active {
             background: linear-gradient(135deg, #D34AA1, #3A6CD6);
-            box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.2);
         }
 
         .form-section {
@@ -631,26 +613,25 @@
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .form-group label {
             display: block;
             color: white;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             font-weight: 500;
-            font-size: 14px;
         }
 
         .form-group input,
         .form-group textarea {
             width: 100%;
-            padding: 10px 12px;
+            padding: 12px 15px;
             border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
+            border-radius: 10px;
             background: rgba(11, 35, 64, 0.7);
             color: white;
-            font-size: 14px;
+            font-size: 15px;
             transition: all 0.3s ease;
         }
 
@@ -658,7 +639,7 @@
         .form-group textarea:focus {
             outline: none;
             border-color: #3A6CD6;
-            box-shadow: 0 0 8px rgba(58, 108, 214, 0.3);
+            box-shadow: 0 0 10px rgba(58, 108, 214, 0.3);
         }
 
         .form-group input:disabled {
@@ -669,16 +650,16 @@
 
         .form-actions {
             display: flex;
-            gap: 10px;
-            margin-top: 20px;
+            gap: 15px;
+            margin-top: 25px;
         }
 
         .form-actions button {
             flex: 1;
-            padding: 10px;
+            padding: 12px;
             border: none;
-            border-radius: 20px;
-            font-size: 14px;
+            border-radius: 25px;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -691,7 +672,7 @@
 
         .submit-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(46, 139, 87, 0.4);
+            box-shadow: 0 8px 20px rgba(46, 139, 87, 0.4);
         }
 
         .submit-btn:disabled {
@@ -714,15 +695,15 @@
 
         .close-modal {
             position: absolute;
-            top: 10px;
-            right: 15px;
+            top: 15px;
+            right: 20px;
             background: none;
             border: none;
             color: white;
-            font-size: 20px;
+            font-size: 24px;
             cursor: pointer;
-            width: 25px;
-            height: 25px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -737,15 +718,15 @@
         .loading-spinner {
             display: none;
             text-align: center;
-            margin: 8px 0;
+            margin: 10px 0;
         }
 
         .loading-spinner .spinner {
             border: 3px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
             border-top: 3px solid white;
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
             animation: spin 1s linear infinite;
             margin: 0 auto;
         }
@@ -755,87 +736,60 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Media Queries para telas muito pequenas */
-        @media (max-width: 480px) {
-            .container {
-                border-radius: 10px;
-            }
-            
-            .header {
-                padding: 15px 10px 5px 10px;
-            }
-            
+        @media (max-width: 900px) {
             .coat-of-arms-left,
             .coat-of-arms-right {
-                width: 40px;
-                height: 40px;
+                width: 80px;
+                height: 80px;
                 top: 35%;
             }
 
             .coat-of-arms-left {
-                left: 5px;
+                left: 15px;
             }
 
             .coat-of-arms-right {
-                right: 5px;
+                right: 15px;
             }
 
             .hamster-container {
-                width: 80px;
-                height: 80px;
-                margin-bottom: 10px;
+                width: 130px;
+                height: 130px;
             }
             
             .hamster {
-                width: 70px;
-                height: 70px;
+                width: 110px;
+                height: 110px;
             }
             
             h1 {
-                font-size: 20px;
-            }
-            
-            .date {
-                font-size: 14px;
-                margin-bottom: 15px;
+                font-size: 28px;
             }
 
             .header-action-buttons {
-                gap: 8px;
-                margin-top: 15px;
-            }
-            
-            .header-btn {
-                padding: 6px 12px;
-                font-size: 12px;
-                border-radius: 15px;
-            }
-            
-            .content {
-                padding: 15px 10px;
+                flex-wrap: wrap;
             }
             
             .function-table th,
             .function-table td {
-                padding: 10px 6px;
-                font-size: 12px;
+                padding: 15px 10px;
+                font-size: 14px;
             }
             
             .status {
-                min-width: 80px;
-                padding: 6px 10px;
-                font-size: 11px;
+                min-width: 90px;
+                padding: 10px 15px;
+                font-size: 13px;
             }
             
             .post-btn {
-                padding: 6px 12px;
-                font-size: 11px;
-                min-width: 80px;
+                padding: 8px 15px;
+                font-size: 13px;
             }
 
             .data-cell {
-                min-width: 70px;
-                padding: 8px 4px;
+                min-width: 100px;
+                padding: 12px 8px;
             }
 
             .choice-buttons {
@@ -845,45 +799,11 @@
 
             .choice-btn {
                 max-width: 100%;
-                width: 100%;
             }
 
             .modal-content {
-                padding: 15px;
-                margin: 0;
-            }
-            
-            .form-actions {
-                flex-direction: column;
-            }
-        }
-
-        @media (max-width: 360px) {
-            .function-table {
-                min-width: 550px;
-            }
-            
-            .function-table th,
-            .function-table td {
-                padding: 8px 4px;
-                font-size: 11px;
-            }
-            
-            .order-code {
-                font-size: 14px;
-                padding: 4px 8px;
-            }
-            
-            .status {
-                min-width: 70px;
-                padding: 5px 8px;
-                font-size: 10px;
-            }
-            
-            .post-btn {
-                min-width: 70px;
-                padding: 5px 10px;
-                font-size: 10px;
+                padding: 20px;
+                margin: 20px;
             }
         }
     </style>
@@ -935,6 +855,7 @@
         </div>
     </div>
 
+    <!-- Modal para Postar/Justificar -->
     <div class="modal-overlay" id="postModal">
         <div class="modal-content">
             <button class="close-modal" id="closeModal">&times;</button>
@@ -949,6 +870,7 @@
                 <button class="choice-btn" id="btnJustificar">Justificar</button>
             </div>
 
+            <!-- Formulário de Postagem -->
             <div class="form-section" id="postForm">
                 <div class="form-group">
                     <label for="postOrdem">Ordem:</label>
@@ -976,6 +898,7 @@
                 </div>
             </div>
 
+            <!-- Formulário de Justificativa -->
             <div class="form-section" id="justifyForm">
                 <div class="form-group">
                     <label for="justifyOrdem">Ordem:</label>
@@ -1041,8 +964,471 @@
 
         // Cache para as datas
         const dateCache = {
-            a
+            analistas: null,
+            secretarios: null
+        };
+
+        // Variáveis para controle do modal
+        let currentOrder = '';
+        let currentResponsavel = '';
+        let currentFuncao = '';
+
+        // Atualizar data atual - AGORA busca da aba específica
+        async function updateCurrentDate(sheetType = 'analistas') {
+            try {
+                // Verificar cache primeiro
+                if (dateCache[sheetType]) {
+                    document.getElementById('current-date').textContent = dateCache[sheetType];
+                    return;
+                }
+
+                // Buscar data das células C5, D5, E5 da planilha específica
+                const config = SHEET_CONFIG[sheetType];
+                const dateUrl = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${config.sheetName}!C5:E5?key=${API_KEY}`;
+                const response = await fetch(dateUrl);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.values && data.values[0]) {
+                        const dates = data.values[0];
+                        // Juntar as três células em uma string
+                        const dateString = dates.join(' ').trim();
+                        if (dateString) {
+                            document.getElementById('current-date').textContent = dateString;
+                            dateCache[sheetType] = dateString; // Salvar no cache
+                            return;
+                        }
+                    }
+                }
+                
+                // Fallback para data atual se não conseguir buscar da planilha
+                const now = new Date();
+                const options = { day: 'numeric', month: 'long', year: 'numeric' };
+                const dateString = now.toLocaleDateString('pt-BR', options);
+                document.getElementById('current-date').textContent = dateString;
+                
+            } catch (error) {
+                console.error('Erro ao carregar data da planilha:', error);
+                // Fallback para data atual em caso de erro
+                const now = new Date();
+                const options = { day: 'numeric', month: 'long', year: 'numeric' };
+                const dateString = now.toLocaleDateString('pt-BR', options);
+                document.getElementById('current-date').textContent = dateString;
+            }
+        }
+
+        // Carregar dados da Google Sheets API - VERSÃO SIMPLIFICADA E RÁPIDA
+        async function loadData(sheetType) {
+            const tableBody = document.getElementById('table-body');
+            const scaleTitle = document.getElementById('scale-title');
+
+            // Atualizar data específica da aba
+            await updateCurrentDate(sheetType);
+
+            // Verificar cache primeiro
+            if (dataCache[sheetType]) {
+                renderTable(dataCache[sheetType], tableBody);
+                scaleTitle.textContent = `SRC - ${sheetType === 'analistas' ? 'Analistas' : 'Secretários'}`;
+                updateButtonStates(sheetType);
+                return;
+            }
+
+            tableBody.innerHTML = '<tr><td colspan="6" class="loading">Carregando dados...</td></tr>';
+
+            try {
+                const config = SHEET_CONFIG[sheetType];
+                
+                // Atualizar título
+                scaleTitle.textContent = `SRC - ${sheetType === 'analistas' ? 'Analistas' : 'Secretários'}`;
+                updateButtonStates(sheetType);
+
+                // Buscar dados de forma mais eficiente
+                const tableData = await fetchDataDirect(config);
+                
+                if (tableData.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="6" class="loading">Nenhum dado encontrado</td></tr>';
+                    return;
+                }
+
+                // Salvar no cache
+                dataCache[sheetType] = tableData;
+
+                // Renderizar tabela
+                renderTable(tableData, tableBody);
+
+            } catch (error) {
+                console.error('Erro ao carregar dados:', error);
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="error">
+                            Erro ao carregar dados. <button class="retry-btn" onclick="loadData('${sheetType}')">Tentar Novamente</button>
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        // Buscar dados de forma DIRETA e RÁPIDA
+        async function fetchDataDirect(config) {
+            // Buscar todas as linhas de uma vez
+            const ranges = [];
+            const cellGroups = config.ranges;
+            
+            // Para cada grupo de células, criar ranges individuais
+            for (let i = 0; i < cellGroups.ordem.length; i++) {
+                const rowNumber = getRowNumberFromCell(cellGroups.ordem[i]);
+                ranges.push(`${config.sheetName}!B${rowNumber}:F${rowNumber}`);
+            }
+
+            // Fazer TODAS as requisições de uma vez SEM delays
+            const fetchPromises = ranges.map(range => 
+                fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}?key=${API_KEY}`)
+                    .then(response => {
+                        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                        return response.json();
+                    })
+                    .catch(error => ({ error: error.message }))
+            );
+
+            const allResponses = await Promise.all(fetchPromises);
+
+            // Processar respostas
+            const tableData = [];
+            
+            for (let i = 0; i < allResponses.length; i++) {
+                const response = allResponses[i];
+                
+                if (response.error) {
+                    console.error('Erro na requisição:', response.error);
+                    continue;
+                }
+                
+                if (response.values && response.values[0]) {
+                    const row = response.values[0];
+                    tableData.push({
+                        ordem: row[0] || '',
+                        prazo: row[1] || '',
+                        responsavel: row[2] || '',
+                        funcao: row[3] || '',
+                        status: row[4] || ''
+                    });
+                }
+            }
+
+            return tableData;
+        }
+
+        // Função auxiliar para extrair número da linha da célula
+        function getRowNumberFromCell(cell) {
+            return cell.replace(/[A-Z]/g, '');
+        }
+
+        // Atualizar estados dos botões
+        function updateButtonStates(activeSheetType) {
+            document.querySelectorAll('.header-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`btn-${activeSheetType}`).classList.add('active');
+        }
+
+        // Renderizar tabela com dados
+        function renderTable(tableData, tableBody) {
+            tableBody.innerHTML = '';
+
+            tableData.forEach(item => {
+                const statusClass = getStatusClass(item.status);
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><span class="order-code">${item.ordem}</span></td>
+                    <td class="function-name">${item.funcao}</td>
+                    <td class="person-name">${item.responsavel}</td>
+                    <td class="data-cell">${formatDate(item.prazo)}</td>
+                    <td><span class="status ${statusClass}">${item.status || 'Pendente'}</span></td>
+                    <td><button class="post-btn" data-ordem="${item.ordem}" data-responsavel="${item.responsavel}" data-funcao="${item.funcao}">Postar</button></td>
+                `;
+                tableBody.appendChild(row);
+            });
+
+            // Reaplicar event listeners
+            reapplyPostButtonListeners();
+        }
+
+        // Formatar data
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            
+            try {
+                // Tenta converter a data do formato do Sheets
+                const date = new Date(dateString);
+                if (!isNaN(date.getTime())) {
+                    return date.toLocaleDateString('pt-BR');
+                }
+            } catch (e) {
+                // Se não conseguir converter, retorna o valor original
+            }
+            
+            return dateString;
+        }
+
+        // Determinar classe CSS baseada no status
+        function getStatusClass(status) {
+            if (!status) return 'pendente';
+            
+            const statusLower = status.toLowerCase();
+            if (statusLower.includes('concluído') || statusLower.includes('concluido') || statusLower.includes('concluída')) {
+                return 'concluido';
+            } else if (statusLower.includes('não realizado') || statusLower.includes('nao realizado') || statusLower.includes('não realizou')) {
+                return 'nao-realizado';
+            } else {
+                return 'pendente';
+            }
+        }
+
+        // FUNÇÕES DO MODAL
+        function showPostModal(ordem, responsavel, funcao) {
+            currentOrder = ordem;
+            currentResponsavel = responsavel;
+            currentFuncao = funcao;
+            
+            // Preencher os campos da ordem (bloqueados)
+            document.getElementById('postOrdem').value = ordem;
+            document.getElementById('justifyOrdem').value = ordem;
+            
+            // Limpar outros campos
+            document.getElementById('postNick').value = '';
+            document.getElementById('postComprovacao').value = '';
+            document.getElementById('postComentario').value = '';
+            document.getElementById('justifyNick').value = '';
+            document.getElementById('justifyMotivo').value = '';
+            
+            // Esconder loadings
+            document.getElementById('postLoading').style.display = 'none';
+            document.getElementById('justifyLoading').style.display = 'none';
+            
+            // Habilitar botões
+            document.getElementById('submitPost').disabled = false;
+            document.getElementById('submitJustify').disabled = false;
+            
+            // Mostrar modal com apenas os botões de escolha
+            document.getElementById('postModal').style.display = 'flex';
+            hideAllForms();
+            
+            // Resetar botões
+            document.getElementById('btnPostar').classList.remove('active');
+            document.getElementById('btnJustificar').classList.remove('active');
+            document.getElementById('modalTitle').textContent = 'Confirmar Ação';
+            document.getElementById('modalSubtitle').textContent = 'Selecione o tipo de ação que deseja realizar';
+        }
+
+        function hideAllForms() {
+            document.getElementById('postForm').classList.remove('active');
+            document.getElementById('justifyForm').classList.remove('active');
+        }
+
+        function showPostForm() {
+            hideAllForms();
+            document.getElementById('postForm').classList.add('active');
+            document.getElementById('btnPostar').classList.add('active');
+            document.getElementById('btnJustificar').classList.remove('active');
+            document.getElementById('modalTitle').textContent = 'Postar Realização';
+            document.getElementById('modalSubtitle').textContent = 'Preencha os dados da sua realização';
+        }
+
+        function showJustifyForm() {
+            hideAllForms();
+            document.getElementById('justifyForm').classList.add('active');
+            document.getElementById('btnPostar').classList.remove('active');
+            document.getElementById('btnJustificar').classList.add('active');
+            document.getElementById('modalTitle').textContent = 'Justificar Ausência';
+            document.getElementById('modalSubtitle').textContent = 'Preencha os dados da sua justificativa';
+        }
+
+        function closeModal() {
+            document.getElementById('postModal').style.display = 'none';
+        }
+
+        // Função para enviar dados para o Google Apps Script
+        async function sendToGoogleScript(data) {
+            try {
+                const formData = new FormData();
+                
+                // Adicionar todos os dados ao FormData
+                for (const key in data) {
+                    formData.append(key, data[key]);
+                }
+
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const result = await response.text();
+                    return { success: true, message: result };
+                } else {
+                    throw new Error('Erro na resposta do servidor');
+                }
+            } catch (error) {
+                console.error('Erro ao enviar para Google Script:', error);
+                return { success: false, message: error.message };
+            }
+        }
+
+        async function submitPost() {
+            const nick = document.getElementById('postNick').value.trim();
+            const comprovacao = document.getElementById('postComprovacao').value.trim();
+            const comentario = document.getElementById('postComentario').value.trim();
+            
+            if (!nick) {
+                alert('Por favor, digite seu nick.');
+                return;
+            }
+            
+            if (!comprovacao) {
+                alert('Por favor, forneça uma comprovação.');
+                return;
+            }
+
+            // Mostrar loading e desabilitar botão
+            document.getElementById('postLoading').style.display = 'block';
+            document.getElementById('submitPost').disabled = true;
+
+            // Preparar dados para envio
+            const postData = {
+                tipo: 'postagem',
+                ordem: currentOrder,
+                nick: nick,
+                comprovacao: comprovacao,
+                comentario: comentario,
+                responsavel: currentResponsavel,
+                funcao: currentFuncao,
+                data: new Date().toLocaleString('pt-BR')
+            };
+
+            // Enviar para Google Apps Script
+            const result = await sendToGoogleScript(postData);
+
+            // Esconder loading
+            document.getElementById('postLoading').style.display = 'none';
+            document.getElementById('submitPost').disabled = false;
+
+            if (result.success) {
+                alert('Postagem enviada com sucesso!');
+                closeModal();
+                
+                // Atualizar apenas o status na tabela
+                updateTableRowStatus(currentOrder, 'concluido');
+            } else {
+                alert('Erro ao enviar postagem: ' + result.message);
+            }
+        }
+
+        async function submitJustify() {
+            const nick = document.getElementById('justifyNick').value.trim();
+            const motivo = document.getElementById('justifyMotivo').value.trim();
+            
+            if (!nick) {
+                alert('Por favor, digite seu nick.');
+                return;
+            }
+            
+            if (!motivo) {
+                alert('Por favor, descreva o motivo da justificativa.');
+                return;
+            }
+
+            // Mostrar loading e desabilitar botão
+            document.getElementById('justifyLoading').style.display = 'block';
+            document.getElementById('submitJustify').disabled = true;
+
+            // Preparar dados para envio
+            const justifyData = {
+                tipo: 'justificativa',
+                ordem: currentOrder,
+                nick: nick,
+                motivo: motivo,
+                responsavel: currentResponsavel,
+                funcao: currentFuncao,
+                data: new Date().toLocaleString('pt-BR')
+            };
+
+            // Enviar para Google Apps Script
+            const result = await sendToGoogleScript(justifyData);
+
+            // Esconder loading
+            document.getElementById('justifyLoading').style.display = 'none';
+            document.getElementById('submitJustify').disabled = false;
+
+            if (result.success) {
+                alert('Justificativa enviada com sucesso!');
+                closeModal();
+                
+                // Atualizar apenas o status na tabela
+                updateTableRowStatus(currentOrder, 'nao-realizado');
+            } else {
+                alert('Erro ao enviar justificativa: ' + result.message);
+            }
+        }
+
+        function updateTableRowStatus(ordem, status) {
+            const rows = document.querySelectorAll('#table-body tr');
+            rows.forEach(row => {
+                const ordemCell = row.querySelector('.order-code');
+                if (ordemCell && ordemCell.textContent === ordem) {
+                    const statusElement = row.querySelector('.status');
+                    
+                    if (status === 'concluido') {
+                        statusElement.textContent = 'Concluído';
+                        statusElement.className = 'status concluido';
+                    } else if (status === 'nao-realizado') {
+                        statusElement.textContent = 'Não Realizado';
+                        statusElement.className = 'status nao-realizado';
+                    }
+                }
+            });
+        }
+
+        // Reaplicar event listeners aos botões Postar
+        function reapplyPostButtonListeners() {
+            document.querySelectorAll('.post-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const ordem = this.getAttribute('data-ordem');
+                    const responsavel = this.getAttribute('data-responsavel');
+                    const funcao = this.getAttribute('data-funcao');
+                    showPostModal(ordem, responsavel, funcao);
+                });
+            });
+        }
+
+        // Event Listeners para os botões
+        document.getElementById('btn-analistas').addEventListener('click', () => {
+            loadData('analistas');
+        });
+
+        document.getElementById('btn-secretarios').addEventListener('click', () => {
+            loadData('secretarios');
+        });
+
+        // Event Listeners do Modal
+        document.getElementById('btnPostar').addEventListener('click', showPostForm);
+        document.getElementById('btnJustificar').addEventListener('click', showJustifyForm);
+        document.getElementById('closeModal').addEventListener('click', closeModal);
+        document.getElementById('cancelPost').addEventListener('click', closeModal);
+        document.getElementById('cancelJustify').addEventListener('click', closeModal);
+        document.getElementById('submitPost').addEventListener('click', submitPost);
+        document.getElementById('submitJustify').addEventListener('click', submitJustify);
+
+        // Fechar modal ao clicar fora
+        document.getElementById('postModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Inicializar
+        updateCurrentDate('analistas');
+
+        // Carregar dados dos analistas por padrão
+        loadData('analistas');
     </script>
 </body>
 </html>
-
