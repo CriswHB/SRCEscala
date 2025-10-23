@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SRC - Escala & Postagem</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0B2340;
+            padding: 20px;
+        }
+        
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #D34AA1, #3A6CD6, #D34AA1, #3A6CD6);
+            background-size: 400% 400%;
+            animation: gradientAnimation 8s ease infinite, pulseGlow 12s ease-in-out infinite;
+            z-index: -1;
+            filter: brightness(1.1) saturate(1.2);
+        }
+        
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes pulseGlow {
+            0%, 100% { 
+                filter: brightness(1.1) saturate(1.2);
+                opacity: 0.9;
+            }
+            50% { 
+                filter: brightness(1.3) saturate(1.4);
+                opacity: 1;
+            }
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            background: rgba(11, 35, 64, 0.85);
+            border-radius: 25px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .header {
+            background: transparent;
+            color: white;
+            padding: 35px 25px 10px 25px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .coat-of-arms-left,
+        .coat-of-arms-right {
+            position: absolute;
+            top: 40%;
+            transform: translateY(-50%);
+            width: 120px;
+            height: 120px;
+            background: url('https://i.imgur.com/ez62Y0j.png') center/contain no-repeat;
+            opacity: 0.08;
+            filter: grayscale(100%) brightness(150%) contrast(150%);
+            animation: coatGlowFade 5s ease-in-out infinite alternate;
+        }
+
+        .coat-of-arms-left {
+            left: 30px;
+        }
+
+        .coat-of-arms-right {
+            right: 30px;
+        }
+
+        @keyframes coatGlowFade {
+            0% { opacity: 0.08; transform: translateY(-50%) scale(1); }
+            100% { opacity: 0.12; transform: translateY(-50%) scale(1.03); }
+        }
+        
+        .hamster-container {
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 25px;
+            border-radius: 50%;
+            background: linear-gradient(to right, #D34AA1, #3A6CD6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+            animation: containerGlow 4s ease-in-out infinite alternate;
+            position: relative;
+            z-index: 2;
+        }
+        
+        @keyframes containerGlow {
+            0% { 
+                box-shadow: 0 12px 30px rgba(211, 74, 161, 0.5);
+                transform: scale(1);
+            }
+            100% { 
+                box-shadow: 0 12px 35px rgba(58, 108, 214, 0.7);
+                transform: scale(1.02);
+            }
+        }
+        
+        .hamster {
+            background: url('https://i.imgur.com/ePdBk9k.png') center/cover no-repeat;
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            animation: 
+                hamsterDance 6s ease-in-out infinite,
+                hamsterSpin 15s linear infinite,
+                hamsterBounce 3s ease-in-out infinite;
+            filter: brightness(1.1) contrast(1.1) saturate(1.2);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+        }
+        
+        @keyframes hamsterDance {
+            0%, 100% { 
+                transform: translateY(0) rotate(0deg) scale(1);
+                border-radius: 50%;
+            }
+            25% { 
+                transform: translateY(-15px) rotate(5deg) scale(1.05);
+                border-radius: 60% 40% 70% 30% / 40% 60% 30% 70%;
+            }
+            50% { 
+                transform: translateY(-5px) rotate(-3deg) scale(0.95);
+                border-radius: 40% 60% 30% 70% / 60% 40% 70% 30%;
+            }
+            75% { 
+                transform: translateY(-10px) rotate(2deg) scale(1.03);
+                border-radius: 70% 30% 60% 40% / 30% 70% 40% 60%;
+            }
+        }
+        
+        @keyframes hamsterSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes hamsterBounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+        
+        h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            color: white;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .date {
+            font-size: 20px;
+            opacity: 0.9;
+            color: white;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 2;
+            margin-bottom: 35px;
+            font-style: normal;
+        }
+        
+        .header-action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 35px;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .header-btn {
+            background: linear-gradient(135deg, #3A6CD6, #D34AA1);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 10px 20px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 4px 12px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .header-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 6px 15px rgba(58, 108, 214, 0.8),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        }
+
+        .header-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+        }
+
+        .header-btn.active {
+            background: linear-gradient(135deg, #D34AA1, #3A6CD6);
+            box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.3), 0 4px 12px rgba(0, 0, 0, 0.6);
+            border: 2px solid white;
+        }
+        
+        .content {
+            padding: 35px;
+            position: relative;
+        }
+        
+        .table-container {
+            width: 100%;
+            overflow: hidden;
+            border-radius: 18px;
+            background: rgba(11, 35, 64, 0.7);
+            position: relative;
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                inset 1px 0 0 rgba(255, 255, 255, 0.05),
+                inset -1px 0 0 rgba(255, 255, 255, 0.05),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        
+        .table-container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #D34AA1, #3A6CD6, #D34AA1);
+            border-radius: 20px;
+            z-index: -1;
+            opacity: 0.3;
+            filter: blur(10px);
+            animation: borderGlow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes borderGlow {
+            0% { opacity: 0.2; }
+            100% { opacity: 0.4; }
+        }
+        
+        .function-table {
+            width: 100%;
+            border-collapse: collapse;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .function-table thead {
+            background: linear-gradient(135deg, #1A2F4D, #22385C);
+            color: white;
+            position: relative;
+            box-shadow: 
+                0 2px 10px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        }
+        
+        .function-table thead::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #D34AA1, #3A6CD6, transparent);
+        }
+        
+        .function-table th {
+            padding: 20px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 18px;
+            letter-spacing: 0.8px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            position: relative;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+        }
+        
+        .function-table th:first-child {
+            border-top-left-radius: 18px;
+        }
+        
+        .function-table th:last-child {
+            border-top-right-radius: 18px;
+        }
+        
+        .function-table tbody tr {
+            background: rgba(11, 35, 64, 0.9);
+            transition: all 0.4s ease;
+            position: relative;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+        }
+        
+        .function-table tbody tr:nth-child(even) {
+            background: rgba(13, 38, 70, 0.9);
+        }
+        
+        .function-table tbody tr:hover {
+            background: rgba(15, 42, 78, 0.95);
+            transform: translateY(-2px);
+            box-shadow: 
+                0 4px 15px rgba(0, 0, 0, 0.4),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+        }
+        
+        .function-table tbody tr:last-child {
+            border-bottom: none;
+        }
+        
+        .function-table td {
+            padding: 20px;
+            font-size: 17px;
+            position: relative;
+            text-align: center;
+            color: white;
+            box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.05);
+        }
+        
+        .function-table td:first-child {
+            box-shadow: none;
+        }
+        
+        .order-code {
+            font-weight: 700;
+            font-size: 20px;
+            color: white;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            background: linear-gradient(135deg, rgba(211, 74, 161, 0.15), rgba(58, 108, 214, 0.15));
+            padding: 8px 12px;
+            border-radius: 8px;
+            display: inline-block;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 
+                0 2px 5px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        .function-name {
+            font-weight: 600;
+            color: white;
+            font-size: 18px;
+            letter-spacing: 0.5px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        
+        .person-name {
+            color: white;
+            font-weight: 500;
+            font-size: 17px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .data-cell {
+            color: #ccc;
+            font-style: normal;
+            min-width: 120px;
+            padding: 15px 10px;
+            word-break: keep-all;
+            white-space: nowrap;
+        }
+        
+        .status {
+            font-weight: 700;
+            font-size: 15px;
+            padding: 12px 20px;
+            border-radius: 30px;
+            text-align: center;
+            display: inline-block;
+            min-width: 130px;
+            transition: all 0.4s ease;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 0.5px;
+            backdrop-filter: blur(10px);
+            border: 1px solid; 
+            box-shadow: 
+                0 6px 20px rgba(0, 0, 0, 0.25),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+        
+        .status:hover {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 
+                0 8px 25px rgba(0, 0, 0, 0.35),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+        
+        .nao-realizado {
+            background: #a52a2a;
+            color: white;
+            border-color: #8b0000; 
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            box-shadow: 
+                0 6px 20px rgba(165, 42, 42, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        .pendente {
+            background: #708090;
+            color: white;
+            border-color: #5f6a7a;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4); 
+            box-shadow: 
+                0 6px 20px rgba(112, 128, 144, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .pendente:hover {
+            box-shadow: 
+                0 8px 25px rgba(112, 128, 144, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+        
+        .concluido {
+            background: #2e8b57;
+            color: white;
+            border-color: #22663d;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            box-shadow: 
+                0 6px 20px rgba(46, 139, 87, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        .post-btn {
+            background: linear-gradient(to right, #D34AA1, #3A6CD6);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 10px 20px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 5px 15px rgba(211, 74, 161, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+            min-width: 120px;
+        }
+        
+        .post-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 8px 20px rgba(211, 74, 161, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+        
+        .post-btn:active {
+            transform: translateY(-1px);
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 25px;
+            color: white;
+            font-size: 15px;
+            background: transparent;
+            letter-spacing: 0.5px;
+        }
+
+        .loading {
+            text-align: center;
+            color: white;
+            padding: 20px;
+            font-size: 18px;
+        }
+
+        .error {
+            text-align: center;
+            color: #ff6b6b;
+            padding: 20px;
+            font-size: 16px;
+        }
+        
+        .retry-btn {
+            background: linear-gradient(135deg, #3A6CD6, #D34AA1);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 10px 20px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .retry-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* MODAL STYLES */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1A2F4D, #22385C);
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-header h2 {
+            color: white;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .modal-header p {
+            color: #ccc;
+            font-size: 16px;
+        }
+
+        .choice-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            justify-content: center;
+        }
+
+        .choice-btn {
+            background: linear-gradient(135deg, #3A6CD6, #D34AA1);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            max-width: 180px;
+        }
+
+        .choice-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(58, 108, 214, 0.4);
+        }
+
+        .choice-btn.active {
+            background: linear-gradient(135deg, #D34AA1, #3A6CD6);
+            box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.2);
+        }
+
+        .form-section {
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: white;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            background: rgba(11, 35, 64, 0.7);
+            color: white;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3A6CD6;
+            box-shadow: 0 0 10px rgba(58, 108, 214, 0.3);
+        }
+
+        .form-group input:disabled {
+            background: rgba(11, 35, 64, 0.5);
+            color: #999;
+            cursor: not-allowed;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .form-actions button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #2e8b57, #22663d);
+            color: white;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(46, 139, 87, 0.4);
+        }
+
+        .cancel-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .cancel-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .close-modal:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        @media (max-width: 900px) {
+            .coat-of-arms-left,
+            .coat-of-arms-right {
+                width: 80px;
+                height: 80px;
+                top: 35%;
+            }
+
+            .coat-of-arms-left {
+                left: 15px;
+            }
+
+            .coat-of-arms-right {
+                right: 15px;
+            }
+
+            .hamster-container {
+                width: 130px;
+                height: 130px;
+            }
+            
+            .hamster {
+                width: 110px;
+                height: 110px;
+            }
+            
+            h1 {
+                font-size: 28px;
+            }
+
+            .header-action-buttons {
+                flex-wrap: wrap;
+            }
+            
+            .function-table th,
+            .function-table td {
+                padding: 15px 10px;
+                font-size: 14px;
+            }
+            
+            .status {
+                min-width: 90px;
+                padding: 10px 15px;
+                font-size: 13px;
+            }
+            
+            .post-btn {
+                padding: 8px 15px;
+                font-size: 13px;
+            }
+
+            .data-cell {
+                min-width: 100px;
+                padding: 12px 8px;
+            }
+
+            .choice-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .choice-btn {
+                max-width: 100%;
+            }
+
+            .modal-content {
+                padding: 20px;
+                margin: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-animation"></div>
+    
+    <div class="container">
+        <div class="header">
+            <div class="coat-of-arms-left"></div>
+            <div class="coat-of-arms-right"></div>
+
+            <div class="hamster-container">
+                <div class="hamster"></div>
+            </div>
+            <h1 id="scale-title">SRC - Escala & Postagem</h1>
+            <div class="date">Data: <span id="current-date">Carregando...</span></div>
+            
+            <div class="header-action-buttons">
+                <button class="header-btn active" id="btn-analistas">Escala dos Analistas</button>
+                <button class="header-btn" id="btn-secretarios">Escala dos Secretários</button>
+            </div>
+        </div>
+        
+        <div class="content">
+            <div class="table-container">
+                <table class="function-table">
+                    <thead>
+                        <tr>
+                            <th>Ordem</th>
+                            <th>Função</th>
+                            <th>Responsável</th>
+                            <th>Prazo</th>
+                            <th>Status</th>
+                            <th>Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        <tr>
+                            <td colspan="6" class="loading">Carregando dados dos analistas...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="footer">
+            </> Desenvolvido por Crisw com base no html de Pegas
+        </div>
+    </div>
+
+    <!-- Modal para Postar/Justificar -->
+    <div class="modal-overlay" id="postModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeModal">&times;</button>
+            
+            <div class="modal-header">
+                <h2 id="modalTitle">Confirmar Ação</h2>
+                <p id="modalSubtitle">Selecione o tipo de ação que deseja realizar</p>
+            </div>
+
+            <div class="choice-buttons">
+                <button class="choice-btn" id="btnPostar">Postar</button>
+                <button class="choice-btn" id="btnJustificar">Justificar</button>
+            </div>
+
+            <!-- Formulário de Postagem -->
+            <div class="form-section" id="postForm">
+                <div class="form-group">
+                    <label for="postOrdem">Ordem:</label>
+                    <input type="text" id="postOrdem" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="postNick">Seu Nick:</label>
+                    <input type="text" id="postNick" placeholder="Digite seu nick...">
+                </div>
+                <div class="form-group">
+                    <label for="postComprovacao">Comprovação:</label>
+                    <input type="text" id="postComprovacao" placeholder="Link ou descrição da comprovação...">
+                </div>
+                <div class="form-group">
+                    <label for="postComentario">Comentário (opcional):</label>
+                    <textarea id="postComentario" rows="3" placeholder="Digite um comentário adicional..."></textarea>
+                </div>
+                <div class="form-actions">
+                    <button class="cancel-btn" id="cancelPost">Cancelar</button>
+                    <button class="submit-btn" id="submitPost">Confirmar Postagem</button>
+                </div>
+            </div>
+
+            <!-- Formulário de Justificativa -->
+            <div class="form-section" id="justifyForm">
+                <div class="form-group">
+                    <label for="justifyOrdem">Ordem:</label>
+                    <input type="text" id="justifyOrdem" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="justifyNick">Seu Nick:</label>
+                    <input type="text" id="justifyNick" placeholder="Digite seu nick...">
+                </div>
+                <div class="form-group">
+                    <label for="justifyMotivo">Motivo da Justificativa:</label>
+                    <textarea id="justifyMotivo" rows="4" placeholder="Descreva o motivo da justificativa..."></textarea>
+                </div>
+                <div class="form-actions">
+                    <button class="cancel-btn" id="cancelJustify">Cancelar</button>
+                    <button class="submit-btn" id="submitJustify">Enviar Justificativa</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configurações da Google Sheets API
+        const SPREADSHEET_ID = '1y8rI827ogdiD2ojzBDOEmmD0G_TvBWiqFmalSt-Kuc4';
+        const API_KEY = 'AIzaSyAqaFHdA3VUVK5w_LMkhH6rzI7-Sb_EWA8';
+
+        // Configurações das células CORRIGIDAS conforme especificado
+        const SHEET_CONFIG = {
+            analistas: {
+                sheetName: 'Escala de Funções - Analistas',
+                ranges: {
+                    ordem: ['B10', 'B13', 'B14', 'B15', 'B16', 'B17', 'B20', 'B21', 'B22'],
+                    funcao: ['E10', 'E13', 'E14', 'E15', 'E16', 'E17', 'E20', 'E21', 'E22'],
+                    responsavel: ['D10', 'D13', 'D14', 'D15', 'D16', 'D17', 'D20', 'D21', 'D22'],
+                    prazo: ['C10', 'C13', 'C14', 'C15', 'C16', 'C17', 'C20', 'C21', 'C22'],
+                    status: ['F10', 'F13', 'F14', 'F15', 'F16', 'F17', 'F20', 'F21', 'F22']
+                }
+            },
+            secretarios: {
+                sheetName: 'Escala de Funções - Secretários',
+                ranges: {
+                    ordem: ['B8', 'B9', 'B10', 'B11', 'B12', 'B13'],
+                    funcao: ['E8', 'E9', 'E10', 'E11', 'E12', 'E13'],
+                    responsavel: ['D8', 'D9', 'D10', 'D11', 'D12', 'D13'],
+                    prazo: ['C8', 'C9', 'C10', 'C11', 'C12', 'C13'],
+                    status: ['F8', 'F9', 'F10', 'F11', 'F12', 'F13']
+                }
+            }
+        };
+
+        // Sistema de cache SIMPLIFICADO
+        const dataCache = {
+            analistas: null,
+            secretarios: null
+        };
+
+        // Cache para as datas
+        const dateCache = {
+            analistas: null,
+            secretarios: null
+        };
+
+        // Variáveis para controle do modal
+        let currentOrder = '';
+        let currentResponsavel = '';
+
+        // Atualizar data atual - AGORA busca da aba específica
+        async function updateCurrentDate(sheetType = 'analistas') {
+            try {
+                // Verificar cache primeiro
+                if (dateCache[sheetType]) {
+                    document.getElementById('current-date').textContent = dateCache[sheetType];
+                    return;
+                }
+
+                // Buscar data das células C5, D5, E5 da planilha específica
+                const config = SHEET_CONFIG[sheetType];
+                const dateUrl = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${config.sheetName}!C5:E5?key=${API_KEY}`;
+                const response = await fetch(dateUrl);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.values && data.values[0]) {
+                        const dates = data.values[0];
+                        // Juntar as três células em uma string
+                        const dateString = dates.join(' ').trim();
+                        if (dateString) {
+                            document.getElementById('current-date').textContent = dateString;
+                            dateCache[sheetType] = dateString; // Salvar no cache
+                            return;
+                        }
+                    }
+                }
+                
+                // Fallback para data atual se não conseguir buscar da planilha
+                const now = new Date();
+                const options = { day: 'numeric', month: 'long', year: 'numeric' };
+                const dateString = now.toLocaleDateString('pt-BR', options);
+                document.getElementById('current-date').textContent = dateString;
+                
+            } catch (error) {
+                console.error('Erro ao carregar data da planilha:', error);
+                // Fallback para data atual em caso de erro
+                const now = new Date();
+                const options = { day: 'numeric', month: 'long', year: 'numeric' };
+                const dateString = now.toLocaleDateString('pt-BR', options);
+                document.getElementById('current-date').textContent = dateString;
+            }
+        }
+
+        // Carregar dados da Google Sheets API - VERSÃO SIMPLIFICADA E RÁPIDA
+        async function loadData(sheetType) {
+            const tableBody = document.getElementById('table-body');
+            const scaleTitle = document.getElementById('scale-title');
+
+            // Atualizar data específica da aba
+            await updateCurrentDate(sheetType);
+
+            // Verificar cache primeiro
+            if (dataCache[sheetType]) {
+                renderTable(dataCache[sheetType], tableBody);
+                scaleTitle.textContent = `SRC - ${sheetType === 'analistas' ? 'Analistas' : 'Secretários'}`;
+                updateButtonStates(sheetType);
+                return;
+            }
+
+            tableBody.innerHTML = '<tr><td colspan="6" class="loading">Carregando dados...</td></tr>';
+
+            try {
+                const config = SHEET_CONFIG[sheetType];
+                
+                // Atualizar título
+                scaleTitle.textContent = `SRC - ${sheetType === 'analistas' ? 'Analistas' : 'Secretários'}`;
+                updateButtonStates(sheetType);
+
+                // Buscar dados de forma mais eficiente
+                const tableData = await fetchDataDirect(config);
+                
+                if (tableData.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="6" class="loading">Nenhum dado encontrado</td></tr>';
+                    return;
+                }
+
+                // Salvar no cache
+                dataCache[sheetType] = tableData;
+
+                // Renderizar tabela
+                renderTable(tableData, tableBody);
+
+            } catch (error) {
+                console.error('Erro ao carregar dados:', error);
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="error">
+                            Erro ao carregar dados. <button class="retry-btn" onclick="loadData('${sheetType}')">Tentar Novamente</button>
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        // Buscar dados de forma DIRETA e RÁPIDA
+        async function fetchDataDirect(config) {
+            // Buscar todas as linhas de uma vez
+            const ranges = [];
+            const cellGroups = config.ranges;
+            
+            // Para cada grupo de células, criar ranges individuais
+            for (let i = 0; i < cellGroups.ordem.length; i++) {
+                const rowNumber = getRowNumberFromCell(cellGroups.ordem[i]);
+                ranges.push(`${config.sheetName}!B${rowNumber}:F${rowNumber}`);
+            }
+
+            // Fazer TODAS as requisições de uma vez SEM delays
+            const fetchPromises = ranges.map(range => 
+                fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}?key=${API_KEY}`)
+                    .then(response => {
+                        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                        return response.json();
+                    })
+                    .catch(error => ({ error: error.message }))
+            );
+
+            const allResponses = await Promise.all(fetchPromises);
+
+            // Processar respostas
+            const tableData = [];
+            
+            for (let i = 0; i < allResponses.length; i++) {
+                const response = allResponses[i];
+                
+                if (response.error) {
+                    console.error('Erro na requisição:', response.error);
+                    continue;
+                }
+                
+                if (response.values && response.values[0]) {
+                    const row = response.values[0];
+                    tableData.push({
+                        ordem: row[0] || '',
+                        prazo: row[1] || '',
+                        responsavel: row[2] || '',
+                        funcao: row[3] || '',
+                        status: row[4] || ''
+                    });
+                }
+            }
+
+            return tableData;
+        }
+
+        // Função auxiliar para extrair número da linha da célula
+        function getRowNumberFromCell(cell) {
+            return cell.replace(/[A-Z]/g, '');
+        }
+
+        // Atualizar estados dos botões
+        function updateButtonStates(activeSheetType) {
+            document.querySelectorAll('.header-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`btn-${activeSheetType}`).classList.add('active');
+        }
+
+        // Renderizar tabela com dados
+        function renderTable(tableData, tableBody) {
+            tableBody.innerHTML = '';
+
+            tableData.forEach(item => {
+                const statusClass = getStatusClass(item.status);
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><span class="order-code">${item.ordem}</span></td>
+                    <td class="function-name">${item.funcao}</td>
+                    <td class="person-name">${item.responsavel}</td>
+                    <td class="data-cell">${formatDate(item.prazo)}</td>
+                    <td><span class="status ${statusClass}">${item.status || 'Pendente'}</span></td>
+                    <td><button class="post-btn" data-ordem="${item.ordem}" data-responsavel="${item.responsavel}">Postar</button></td>
+                `;
+                tableBody.appendChild(row);
+            });
+
+            // Reaplicar event listeners
+            reapplyPostButtonListeners();
+        }
+
+        // Formatar data
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            
+            try {
+                // Tenta converter a data do formato do Sheets
+                const date = new Date(dateString);
+                if (!isNaN(date.getTime())) {
+                    return date.toLocaleDateString('pt-BR');
+                }
+            } catch (e) {
+                // Se não conseguir converter, retorna o valor original
+            }
+            
+            return dateString;
+        }
+
+        // Determinar classe CSS baseada no status
+        function getStatusClass(status) {
+            if (!status) return 'pendente';
+            
+            const statusLower = status.toLowerCase();
+            if (statusLower.includes('concluído') || statusLower.includes('concluido') || statusLower.includes('concluída')) {
+                return 'concluido';
+            } else if (statusLower.includes('não realizado') || statusLower.includes('nao realizado') || statusLower.includes('não realizou')) {
+                return 'nao-realizado';
+            } else {
+                return 'pendente';
+            }
+        }
+
+        // FUNÇÕES DO MODAL
+        function showPostModal(ordem, responsavel) {
+            currentOrder = ordem;
+            currentResponsavel = responsavel;
+            
+            // Preencher os campos da ordem (bloqueados)
+            document.getElementById('postOrdem').value = ordem;
+            document.getElementById('justifyOrdem').value = ordem;
+            
+            // Limpar outros campos
+            document.getElementById('postNick').value = '';
+            document.getElementById('postComprovacao').value = '';
+            document.getElementById('postComentario').value = '';
+            document.getElementById('justifyNick').value = '';
+            document.getElementById('justifyMotivo').value = '';
+            
+            // Mostrar modal com apenas os botões de escolha
+            document.getElementById('postModal').style.display = 'flex';
+            hideAllForms();
+            
+            // Resetar botões
+            document.getElementById('btnPostar').classList.remove('active');
+            document.getElementById('btnJustificar').classList.remove('active');
+            document.getElementById('modalTitle').textContent = 'Confirmar Ação';
+            document.getElementById('modalSubtitle').textContent = 'Selecione o tipo de ação que deseja realizar';
+        }
+
+        function hideAllForms() {
+            document.getElementById('postForm').classList.remove('active');
+            document.getElementById('justifyForm').classList.remove('active');
+        }
+
+        function showPostForm() {
+            hideAllForms();
+            document.getElementById('postForm').classList.add('active');
+            document.getElementById('btnPostar').classList.add('active');
+            document.getElementById('btnJustificar').classList.remove('active');
+            document.getElementById('modalTitle').textContent = 'Postar Realização';
+            document.getElementById('modalSubtitle').textContent = 'Preencha os dados da sua realização';
+        }
+
+        function showJustifyForm() {
+            hideAllForms();
+            document.getElementById('justifyForm').classList.add('active');
+            document.getElementById('btnPostar').classList.remove('active');
+            document.getElementById('btnJustificar').classList.add('active');
+            document.getElementById('modalTitle').textContent = 'Justificar Ausência';
+            document.getElementById('modalSubtitle').textContent = 'Preencha os dados da sua justificativa';
+        }
+
+        function closeModal() {
+            document.getElementById('postModal').style.display = 'none';
+        }
+
+        function submitPost() {
+            const nick = document.getElementById('postNick').value.trim();
+            const comprovacao = document.getElementById('postComprovacao').value.trim();
+            const comentario = document.getElementById('postComentario').value.trim();
+            
+            if (!nick) {
+                alert('Por favor, digite seu nick.');
+                return;
+            }
+            
+            if (!comprovacao) {
+                alert('Por favor, forneça uma comprovação.');
+                return;
+            }
+            
+            // Aqui você pode enviar os dados para onde precisar
+            console.log('Dados da Postagem:', {
+                ordem: currentOrder,
+                nick: nick,
+                comprovacao: comprovacao,
+                comentario: comentario,
+                responsavel: currentResponsavel
+            });
+            
+            alert('Postagem enviada com sucesso!');
+            closeModal();
+            
+            // Atualizar apenas o status na tabela
+            updateTableRowStatus(currentOrder, 'concluido');
+        }
+
+        function submitJustify() {
+            const nick = document.getElementById('justifyNick').value.trim();
+            const motivo = document.getElementById('justifyMotivo').value.trim();
+            
+            if (!nick) {
+                alert('Por favor, digite seu nick.');
+                return;
+            }
+            
+            if (!motivo) {
+                alert('Por favor, descreva o motivo da justificativa.');
+                return;
+            }
+            
+            // Aqui você pode enviar os dados para onde precisar
+            console.log('Dados da Justificativa:', {
+                ordem: currentOrder,
+                nick: nick,
+                motivo: motivo,
+                responsavel: currentResponsavel
+            });
+            
+            alert('Justificativa enviada com sucesso!');
+            closeModal();
+            
+            // Atualizar apenas o status na tabela
+            updateTableRowStatus(currentOrder, 'nao-realizado');
+        }
+
+        function updateTableRowStatus(ordem, status) {
+            const rows = document.querySelectorAll('#table-body tr');
+            rows.forEach(row => {
+                const ordemCell = row.querySelector('.order-code');
+                if (ordemCell && ordemCell.textContent === ordem) {
+                    const statusElement = row.querySelector('.status');
+                    
+                    if (status === 'concluido') {
+                        statusElement.textContent = 'Concluído';
+                        statusElement.className = 'status concluido';
+                    } else if (status === 'nao-realizado') {
+                        statusElement.textContent = 'Não Realizado';
+                        statusElement.className = 'status nao-realizado';
+                    }
+                }
+            });
+        }
+
+        // Reaplicar event listeners aos botões Postar
+        function reapplyPostButtonListeners() {
+            document.querySelectorAll('.post-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const ordem = this.getAttribute('data-ordem');
+                    const responsavel = this.getAttribute('data-responsavel');
+                    showPostModal(ordem, responsavel);
+                });
+            });
+        }
+
+        // Event Listeners para os botões
+        document.getElementById('btn-analistas').addEventListener('click', () => {
+            loadData('analistas');
+        });
+
+        document.getElementById('btn-secretarios').addEventListener('click', () => {
+            loadData('secretarios');
+        });
+
+        // Event Listeners do Modal
+        document.getElementById('btnPostar').addEventListener('click', showPostForm);
+        document.getElementById('btnJustificar').addEventListener('click', showJustifyForm);
+        document.getElementById('closeModal').addEventListener('click', closeModal);
+        document.getElementById('cancelPost').addEventListener('click', closeModal);
+        document.getElementById('cancelJustify').addEventListener('click', closeModal);
+        document.getElementById('submitPost').addEventListener('click', submitPost);
+        document.getElementById('submitJustify').addEventListener('click', submitJustify);
+
+        // Fechar modal ao clicar fora
+        document.getElementById('postModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Inicializar
+        updateCurrentDate('analistas');
+
+        // Carregar dados dos analistas por padrão
+        loadData('analistas');
+    </script>
+</body>
+</html>
