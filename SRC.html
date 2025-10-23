@@ -675,6 +675,13 @@
             box-shadow: 0 8px 20px rgba(46, 139, 87, 0.4);
         }
 
+        .submit-btn:disabled {
+            background: #708090;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
         .cancel-btn {
             background: rgba(255, 255, 255, 0.1);
             color: white;
@@ -706,6 +713,27 @@
 
         .close-modal:hover {
             background: rgba(255, 255, 255, 0.1);
+        }
+
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .loading-spinner .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid white;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         @media (max-width: 900px) {
@@ -860,6 +888,10 @@
                     <label for="postComentario">Comentário (opcional):</label>
                     <textarea id="postComentario" rows="3" placeholder="Digite um comentário adicional..."></textarea>
                 </div>
+                <div class="loading-spinner" id="postLoading">
+                    <div class="spinner"></div>
+                    <p style="color: white; margin-top: 10px;">Enviando dados...</p>
+                </div>
                 <div class="form-actions">
                     <button class="cancel-btn" id="cancelPost">Cancelar</button>
                     <button class="submit-btn" id="submitPost">Confirmar Postagem</button>
@@ -880,6 +912,10 @@
                     <label for="justifyMotivo">Motivo da Justificativa:</label>
                     <textarea id="justifyMotivo" rows="4" placeholder="Descreva o motivo da justificativa..."></textarea>
                 </div>
+                <div class="loading-spinner" id="justifyLoading">
+                    <div class="spinner"></div>
+                    <p style="color: white; margin-top: 10px;">Enviando dados...</p>
+                </div>
                 <div class="form-actions">
                     <button class="cancel-btn" id="cancelJustify">Cancelar</button>
                     <button class="submit-btn" id="submitJustify">Enviar Justificativa</button>
@@ -892,6 +928,9 @@
         // Configurações da Google Sheets API
         const SPREADSHEET_ID = '1y8rI827ogdiD2ojzBDOEmmD0G_TvBWiqFmalSt-Kuc4';
         const API_KEY = 'AIzaSyAqaFHdA3VUVK5w_LMkhH6rzI7-Sb_EWA8';
+
+        // URL do Google Apps Script para envio dos dados
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzLxOuTomWG6OmF2jC5qPr-rZATw6r6fpaR2lERBqK2XT4bB0WS4H26IQ5xeEDQqxpo/exec';
 
         // Configurações das células CORRIGIDAS conforme especificado
         const SHEET_CONFIG = {
@@ -932,6 +971,7 @@
         // Variáveis para controle do modal
         let currentOrder = '';
         let currentResponsavel = '';
+        let currentFuncao = '';
 
         // Atualizar data atual - AGORA busca da aba específica
         async function updateCurrentDate(sheetType = 'analistas') {
@@ -1103,7 +1143,7 @@
                     <td class="person-name">${item.responsavel}</td>
                     <td class="data-cell">${formatDate(item.prazo)}</td>
                     <td><span class="status ${statusClass}">${item.status || 'Pendente'}</span></td>
-                    <td><button class="post-btn" data-ordem="${item.ordem}" data-responsavel="${item.responsavel}">Postar</button></td>
+                    <td><button class="post-btn" data-ordem="${item.ordem}" data-responsavel="${item.responsavel}" data-funcao="${item.funcao}">Postar</button></td>
                 `;
                 tableBody.appendChild(row);
             });
@@ -1144,9 +1184,10 @@
         }
 
         // FUNÇÕES DO MODAL
-        function showPostModal(ordem, responsavel) {
+        function showPostModal(ordem, responsavel, funcao) {
             currentOrder = ordem;
             currentResponsavel = responsavel;
+            currentFuncao = funcao;
             
             // Preencher os campos da ordem (bloqueados)
             document.getElementById('postOrdem').value = ordem;
@@ -1158,6 +1199,14 @@
             document.getElementById('postComentario').value = '';
             document.getElementById('justifyNick').value = '';
             document.getElementById('justifyMotivo').value = '';
+            
+            // Esconder loadings
+            document.getElementById('postLoading').style.display = 'none';
+            document.getElementById('justifyLoading').style.display = 'none';
+            
+            // Habilitar botões
+            document.getElementById('submitPost').disabled = false;
+            document.getElementById('submitJustify').disabled = false;
             
             // Mostrar modal com apenas os botões de escolha
             document.getElementById('postModal').style.display = 'flex';
@@ -1197,7 +1246,34 @@
             document.getElementById('postModal').style.display = 'none';
         }
 
-        function submitPost() {
+        // Função para enviar dados para o Google Apps Script
+        async function sendToGoogleScript(data) {
+            try {
+                const formData = new FormData();
+                
+                // Adicionar todos os dados ao FormData
+                for (const key in data) {
+                    formData.append(key, data[key]);
+                }
+
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const result = await response.text();
+                    return { success: true, message: result };
+                } else {
+                    throw new Error('Erro na resposta do servidor');
+                }
+            } catch (error) {
+                console.error('Erro ao enviar para Google Script:', error);
+                return { success: false, message: error.message };
+            }
+        }
+
+        async function submitPost() {
             const nick = document.getElementById('postNick').value.trim();
             const comprovacao = document.getElementById('postComprovacao').value.trim();
             const comentario = document.getElementById('postComentario').value.trim();
@@ -1211,24 +1287,42 @@
                 alert('Por favor, forneça uma comprovação.');
                 return;
             }
-            
-            // Aqui você pode enviar os dados para onde precisar
-            console.log('Dados da Postagem:', {
+
+            // Mostrar loading e desabilitar botão
+            document.getElementById('postLoading').style.display = 'block';
+            document.getElementById('submitPost').disabled = true;
+
+            // Preparar dados para envio
+            const postData = {
+                tipo: 'postagem',
                 ordem: currentOrder,
                 nick: nick,
                 comprovacao: comprovacao,
                 comentario: comentario,
-                responsavel: currentResponsavel
-            });
-            
-            alert('Postagem enviada com sucesso!');
-            closeModal();
-            
-            // Atualizar apenas o status na tabela
-            updateTableRowStatus(currentOrder, 'concluido');
+                responsavel: currentResponsavel,
+                funcao: currentFuncao,
+                data: new Date().toLocaleString('pt-BR')
+            };
+
+            // Enviar para Google Apps Script
+            const result = await sendToGoogleScript(postData);
+
+            // Esconder loading
+            document.getElementById('postLoading').style.display = 'none';
+            document.getElementById('submitPost').disabled = false;
+
+            if (result.success) {
+                alert('Postagem enviada com sucesso!');
+                closeModal();
+                
+                // Atualizar apenas o status na tabela
+                updateTableRowStatus(currentOrder, 'concluido');
+            } else {
+                alert('Erro ao enviar postagem: ' + result.message);
+            }
         }
 
-        function submitJustify() {
+        async function submitJustify() {
             const nick = document.getElementById('justifyNick').value.trim();
             const motivo = document.getElementById('justifyMotivo').value.trim();
             
@@ -1241,20 +1335,38 @@
                 alert('Por favor, descreva o motivo da justificativa.');
                 return;
             }
-            
-            // Aqui você pode enviar os dados para onde precisar
-            console.log('Dados da Justificativa:', {
+
+            // Mostrar loading e desabilitar botão
+            document.getElementById('justifyLoading').style.display = 'block';
+            document.getElementById('submitJustify').disabled = true;
+
+            // Preparar dados para envio
+            const justifyData = {
+                tipo: 'justificativa',
                 ordem: currentOrder,
                 nick: nick,
                 motivo: motivo,
-                responsavel: currentResponsavel
-            });
-            
-            alert('Justificativa enviada com sucesso!');
-            closeModal();
-            
-            // Atualizar apenas o status na tabela
-            updateTableRowStatus(currentOrder, 'nao-realizado');
+                responsavel: currentResponsavel,
+                funcao: currentFuncao,
+                data: new Date().toLocaleString('pt-BR')
+            };
+
+            // Enviar para Google Apps Script
+            const result = await sendToGoogleScript(justifyData);
+
+            // Esconder loading
+            document.getElementById('justifyLoading').style.display = 'none';
+            document.getElementById('submitJustify').disabled = false;
+
+            if (result.success) {
+                alert('Justificativa enviada com sucesso!');
+                closeModal();
+                
+                // Atualizar apenas o status na tabela
+                updateTableRowStatus(currentOrder, 'nao-realizado');
+            } else {
+                alert('Erro ao enviar justificativa: ' + result.message);
+            }
         }
 
         function updateTableRowStatus(ordem, status) {
@@ -1281,7 +1393,8 @@
                 button.addEventListener('click', function() {
                     const ordem = this.getAttribute('data-ordem');
                     const responsavel = this.getAttribute('data-responsavel');
-                    showPostModal(ordem, responsavel);
+                    const funcao = this.getAttribute('data-funcao');
+                    showPostModal(ordem, responsavel, funcao);
                 });
             });
         }
