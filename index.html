@@ -1,5 +1,4 @@
-
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -245,9 +244,10 @@
             position: relative;
         }
         
+        /* ESTILOS DA TABELA RESPONSIVA */
         .table-container {
             width: 100%;
-            overflow-x: auto;
+            overflow: hidden;
             border-radius: 12px;
             background: rgba(11, 35, 64, 0.7);
             position: relative;
@@ -258,7 +258,6 @@
                 inset -1px 0 0 rgba(255, 255, 255, 0.05),
                 inset 0 -1px 0 rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.15);
-            -webkit-overflow-scrolling: touch;
         }
         
         .table-container::before {
@@ -281,12 +280,12 @@
             100% { opacity: 0.4; }
         }
         
+        /* Tabela para desktop */
         .function-table {
             width: 100%;
             border-collapse: collapse;
             position: relative;
             z-index: 1;
-            min-width: 600px; /* Garante que a tabela não quebre em telas pequenas */
         }
         
         .function-table thead {
@@ -493,6 +492,68 @@
         
         .post-btn:active {
             transform: translateY(-1px);
+        }
+        
+        /* CARDS PARA MOBILE */
+        .cards-container {
+            display: none;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .function-card {
+            background: rgba(11, 35, 64, 0.9);
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .function-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
+        
+        .card-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .card-row:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .card-label {
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+        }
+        
+        .card-value {
+            color: white;
+            text-align: right;
+            font-size: 14px;
+        }
+        
+        .card-status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 12px;
+            text-align: center;
+        }
+        
+        .card-actions {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
         }
         
         .footer {
@@ -745,7 +806,27 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Media Queries para telas muito pequenas */
+        /* MEDIA QUERIES - RESPONSIVIDADE */
+        @media (max-width: 768px) {
+            .function-table {
+                display: none;
+            }
+            
+            .cards-container {
+                display: flex;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .function-table {
+                display: table;
+            }
+            
+            .cards-container {
+                display: none;
+            }
+        }
+
         @media (max-width: 480px) {
             .container {
                 border-radius: 10px;
@@ -805,27 +886,18 @@
                 padding: 15px 10px;
             }
             
-            .function-table th,
-            .function-table td {
-                padding: 10px 6px;
-                font-size: 12px;
+            .function-card {
+                padding: 12px;
             }
             
-            .status {
-                min-width: 80px;
-                padding: 6px 10px;
-                font-size: 11px;
+            .card-label, .card-value {
+                font-size: 13px;
             }
             
             .post-btn {
                 padding: 6px 12px;
                 font-size: 11px;
                 min-width: 80px;
-            }
-
-            .data-cell {
-                min-width: 70px;
-                padding: 8px 4px;
             }
 
             .choice-buttons {
@@ -845,35 +917,6 @@
             
             .form-actions {
                 flex-direction: column;
-            }
-        }
-
-        @media (max-width: 360px) {
-            .function-table {
-                min-width: 550px;
-            }
-            
-            .function-table th,
-            .function-table td {
-                padding: 8px 4px;
-                font-size: 11px;
-            }
-            
-            .order-code {
-                font-size: 14px;
-                padding: 4px 8px;
-            }
-            
-            .status {
-                min-width: 70px;
-                padding: 5px 8px;
-                font-size: 10px;
-            }
-            
-            .post-btn {
-                min-width: 70px;
-                padding: 5px 10px;
-                font-size: 10px;
             }
         }
     </style>
@@ -900,6 +943,7 @@
         
         <div class="content">
             <div class="table-container">
+                <!-- Tabela para desktop -->
                 <table class="function-table">
                     <thead>
                         <tr>
@@ -917,6 +961,11 @@
                         </tr>
                     </tbody>
                 </table>
+                
+                <!-- Cards para mobile -->
+                <div class="cards-container" id="cards-body">
+                    <div class="loading">Carregando dados dos analistas...</div>
+                </div>
             </div>
         </div>
         
@@ -1090,6 +1139,7 @@
         // Carregar dados da Google Sheets API - VERSÃO SIMPLIFICADA E RÁPIDA
         async function loadData(sheetType) {
             const tableBody = document.getElementById('table-body');
+            const cardsBody = document.getElementById('cards-body');
             const scaleTitle = document.getElementById('scale-title');
 
             // Atualizar data específica da aba
@@ -1098,12 +1148,14 @@
             // Verificar cache primeiro
             if (dataCache[sheetType]) {
                 renderTable(dataCache[sheetType], tableBody);
+                renderCards(dataCache[sheetType], cardsBody);
                 scaleTitle.textContent = `SRC - ${sheetType === 'analistas' ? 'Analistas' : 'Secretários'}`;
                 updateButtonStates(sheetType);
                 return;
             }
 
             tableBody.innerHTML = '<tr><td colspan="6" class="loading">Carregando dados...</td></tr>';
+            cardsBody.innerHTML = '<div class="loading">Carregando dados...</div>';
 
             try {
                 const config = SHEET_CONFIG[sheetType];
@@ -1117,14 +1169,16 @@
                 
                 if (tableData.length === 0) {
                     tableBody.innerHTML = '<tr><td colspan="6" class="loading">Nenhum dado encontrado</td></tr>';
+                    cardsBody.innerHTML = '<div class="loading">Nenhum dado encontrado</div>';
                     return;
                 }
 
                 // Salvar no cache
                 dataCache[sheetType] = tableData;
 
-                // Renderizar tabela
+                // Renderizar tabela e cards
                 renderTable(tableData, tableBody);
+                renderCards(tableData, cardsBody);
 
             } catch (error) {
                 console.error('Erro ao carregar dados:', error);
@@ -1134,6 +1188,11 @@
                             Erro ao carregar dados. <button class="retry-btn" onclick="loadData('${sheetType}')">Tentar Novamente</button>
                         </td>
                     </tr>
+                `;
+                cardsBody.innerHTML = `
+                    <div class="error">
+                        Erro ao carregar dados. <button class="retry-btn" onclick="loadData('${sheetType}')">Tentar Novamente</button>
+                    </div>
                 `;
             }
         }
@@ -1216,6 +1275,47 @@
                     <td><button class="post-btn" data-ordem="${item.ordem}" data-responsavel="${item.responsavel}" data-funcao="${item.funcao}">Postar</button></td>
                 `;
                 tableBody.appendChild(row);
+            });
+
+            // Reaplicar event listeners
+            reapplyPostButtonListeners();
+        }
+
+        // Renderizar cards para mobile
+        function renderCards(tableData, cardsBody) {
+            cardsBody.innerHTML = '';
+
+            tableData.forEach(item => {
+                const statusClass = getStatusClass(item.status);
+                
+                const card = document.createElement('div');
+                card.className = 'function-card';
+                card.innerHTML = `
+                    <div class="card-row">
+                        <span class="card-label">Ordem:</span>
+                        <span class="card-value order-code">${item.ordem}</span>
+                    </div>
+                    <div class="card-row">
+                        <span class="card-label">Função:</span>
+                        <span class="card-value function-name">${item.funcao}</span>
+                    </div>
+                    <div class="card-row">
+                        <span class="card-label">Responsável:</span>
+                        <span class="card-value person-name">${item.responsavel}</span>
+                    </div>
+                    <div class="card-row">
+                        <span class="card-label">Prazo:</span>
+                        <span class="card-value data-cell">${formatDate(item.prazo)}</span>
+                    </div>
+                    <div class="card-row">
+                        <span class="card-label">Status:</span>
+                        <span class="card-value"><span class="card-status ${statusClass}">${item.status || 'Pendente'}</span></span>
+                    </div>
+                    <div class="card-actions">
+                        <button class="post-btn" data-ordem="${item.ordem}" data-responsavel="${item.responsavel}" data-funcao="${item.funcao}">Postar</button>
+                    </div>
+                `;
+                cardsBody.appendChild(card);
             });
 
             // Reaplicar event listeners
@@ -1452,6 +1552,23 @@
                     } else if (status === 'nao-realizado') {
                         statusElement.textContent = 'Não Realizado';
                         statusElement.className = 'status nao-realizado';
+                    }
+                }
+            });
+            
+            // Atualizar também nos cards
+            const cards = document.querySelectorAll('#cards-body .function-card');
+            cards.forEach(card => {
+                const ordemCard = card.querySelector('.order-code');
+                if (ordemCard && ordemCard.textContent === ordem) {
+                    const statusElement = card.querySelector('.card-status');
+                    
+                    if (status === 'concluido') {
+                        statusElement.textContent = 'Concluído';
+                        statusElement.className = 'card-status concluido';
+                    } else if (status === 'nao-realizado') {
+                        statusElement.textContent = 'Não Realizado';
+                        statusElement.className = 'card-status nao-realizado';
                     }
                 }
             });
