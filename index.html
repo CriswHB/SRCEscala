@@ -11,18 +11,8 @@
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
-        /* ----- MUDANÇAS APLICADAS AQUI ----- */
-        html {
-            overflow: hidden; /* Garante que o elemento raiz não tenha scroll */
-            height: 100%;
-        }
         
         body {
-            /* Impede o scroll vertical e horizontal no corpo da página */
-            overflow-y: hidden; 
-            overflow-x: hidden; 
-            
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -30,7 +20,6 @@
             background: #0B2340;
             padding: 10px;
         }
-        /* ---------------------------------- */
         
         .background-animation {
             position: fixed;
@@ -257,7 +246,7 @@
         
         .table-container {
             width: 100%;
-            overflow-x: auto; /* Permite o scroll horizontal (arrasto pro lado) */
+            overflow-x: auto;
             border-radius: 12px;
             background: rgba(11, 35, 64, 0.7);
             position: relative;
@@ -935,6 +924,7 @@
         </div>
     </div>
 
+    <!-- Modal para Postar/Justificar -->
     <div class="modal-overlay" id="postModal">
         <div class="modal-content">
             <button class="close-modal" id="closeModal">&times;</button>
@@ -949,6 +939,7 @@
                 <button class="choice-btn" id="btnJustificar">Justificar</button>
             </div>
 
+            <!-- Formulário de Postagem -->
             <div class="form-section" id="postForm">
                 <div class="form-group">
                     <label for="postOrdem">Ordem:</label>
@@ -976,6 +967,7 @@
                 </div>
             </div>
 
+            <!-- Formulário de Justificativa -->
             <div class="form-section" id="justifyForm">
                 <div class="form-group">
                     <label for="justifyOrdem">Ordem:</label>
@@ -1041,7 +1033,471 @@
 
         // Cache para as datas
         const dateCache = {
-            a
+            analistas: null,
+            secretarios: null
+        };
+
+        // Variáveis para controle do modal
+        let currentOrder = '';
+        let currentResponsavel = '';
+        let currentFuncao = '';
+
+        // Atualizar data atual - AGORA busca da aba específica
+        async function updateCurrentDate(sheetType = 'analistas') {
+            try {
+                // Verificar cache primeiro
+                if (dateCache[sheetType]) {
+                    document.getElementById('current-date').textContent = dateCache[sheetType];
+                    return;
+                }
+
+                // Buscar data das células C5, D5, E5 da planilha específica
+                const config = SHEET_CONFIG[sheetType];
+                const dateUrl = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${config.sheetName}!C5:E5?key=${API_KEY}`;
+                const response = await fetch(dateUrl);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.values && data.values[0]) {
+                        const dates = data.values[0];
+                        // Juntar as três células em uma string
+                        const dateString = dates.join(' ').trim();
+                        if (dateString) {
+                            document.getElementById('current-date').textContent = dateString;
+                            dateCache[sheetType] = dateString; // Salvar no cache
+                            return;
+                        }
+                    }
+                }
+                
+                // Fallback para data atual se não conseguir buscar da planilha
+                const now = new Date();
+                const options = { day: 'numeric', month: 'long', year: 'numeric' };
+                const dateString = now.toLocaleDateString('pt-BR', options);
+                document.getElementById('current-date').textContent = dateString;
+                
+            } catch (error) {
+                console.error('Erro ao carregar data da planilha:', error);
+                // Fallback para data atual em caso de erro
+                const now = new Date();
+                const options = { day: 'numeric', month: 'long', year: 'numeric' };
+                const dateString = now.toLocaleDateString('pt-BR', options);
+                document.getElementById('current-date').textContent = dateString;
+            }
+        }
+
+        // Carregar dados da Google Sheets API - VERSÃO SIMPLIFICADA E RÁPIDA
+        async function loadData(sheetType) {
+            const tableBody = document.getElementById('table-body');
+            const scaleTitle = document.getElementById('scale-title');
+
+            // Atualizar data específica da aba
+            await updateCurrentDate(sheetType);
+
+            // Verificar cache primeiro
+            if (dataCache[sheetType]) {
+                renderTable(dataCache[sheetType], tableBody);
+                scaleTitle.textContent = `SRC - ${sheetType === 'analistas' ? 'Analistas' : 'Secretários'}`;
+                updateButtonStates(sheetType);
+                return;
+            }
+
+            tableBody.innerHTML = '<tr><td colspan="6" class="loading">Carregando dados...</td></tr>';
+
+            try {
+                const config = SHEET_CONFIG[sheetType];
+                
+                // Atualizar título
+                scaleTitle.textContent = `SRC - ${sheetType === 'analistas' ? 'Analistas' : 'Secretários'}`;
+                updateButtonStates(sheetType);
+
+                // Buscar dados de forma mais eficiente
+                const tableData = await fetchDataDirect(config);
+                
+                if (tableData.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="6" class="loading">Nenhum dado encontrado</td></tr>';
+                    return;
+                }
+
+                // Salvar no cache
+                dataCache[sheetType] = tableData;
+
+                // Renderizar tabela
+                renderTable(tableData, tableBody);
+
+            } catch (error) {
+                console.error('Erro ao carregar dados:', error);
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="error">
+                            Erro ao carregar dados. <button class="retry-btn" onclick="loadData('${sheetType}')">Tentar Novamente</button>
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        // Buscar dados de forma DIRETA e RÁPIDA
+        async function fetchDataDirect(config) {
+            // Buscar todas as linhas de uma vez
+            const ranges = [];
+            const cellGroups = config.ranges;
+            
+            // Para cada grupo de células, criar ranges individuais
+            for (let i = 0; i < cellGroups.ordem.length; i++) {
+                const rowNumber = getRowNumberFromCell(cellGroups.ordem[i]);
+                ranges.push(`${config.sheetName}!B${rowNumber}:F${rowNumber}`);
+            }
+
+            // Fazer TODAS as requisições de uma vez SEM delays
+            const fetchPromises = ranges.map(range => 
+                fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}?key=${API_KEY}`)
+                    .then(response => {
+                        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                        return response.json();
+                    })
+                    .catch(error => ({ error: error.message }))
+            );
+
+            const allResponses = await Promise.all(fetchPromises);
+
+            // Processar respostas
+            const tableData = [];
+            
+            for (let i = 0; i < allResponses.length; i++) {
+                const response = allResponses[i];
+                
+                if (response.error) {
+                    console.error('Erro na requisição:', response.error);
+                    continue;
+                }
+                
+                if (response.values && response.values[0]) {
+                    const row = response.values[0];
+                    tableData.push({
+                        ordem: row[0] || '',
+                        prazo: row[1] || '',
+                        responsavel: row[2] || '',
+                        funcao: row[3] || '',
+                        status: row[4] || ''
+                    });
+                }
+            }
+
+            return tableData;
+        }
+
+        // Função auxiliar para extrair número da linha da célula
+        function getRowNumberFromCell(cell) {
+            return cell.replace(/[A-Z]/g, '');
+        }
+
+        // Atualizar estados dos botões
+        function updateButtonStates(activeSheetType) {
+            document.querySelectorAll('.header-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`btn-${activeSheetType}`).classList.add('active');
+        }
+
+        // Renderizar tabela com dados
+        function renderTable(tableData, tableBody) {
+            tableBody.innerHTML = '';
+
+            tableData.forEach(item => {
+                const statusClass = getStatusClass(item.status);
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><span class="order-code">${item.ordem}</span></td>
+                    <td class="function-name">${item.funcao}</td>
+                    <td class="person-name">${item.responsavel}</td>
+                    <td class="data-cell">${formatDate(item.prazo)}</td>
+                    <td><span class="status ${statusClass}">${item.status || 'Pendente'}</span></td>
+                    <td><button class="post-btn" data-ordem="${item.ordem}" data-responsavel="${item.responsavel}" data-funcao="${item.funcao}">Postar</button></td>
+                `;
+                tableBody.appendChild(row);
+            });
+
+            // Reaplicar event listeners
+            reapplyPostButtonListeners();
+        }
+
+        // Formatar data
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            
+            try {
+                // Tenta converter a data do formato do Sheets
+                const date = new Date(dateString);
+                if (!isNaN(date.getTime())) {
+                    return date.toLocaleDateString('pt-BR');
+                }
+            } catch (e) {
+                // Se não conseguir converter, retorna o valor original
+            }
+            
+            return dateString;
+        }
+
+        // Determinar classe CSS baseada no status
+        function getStatusClass(status) {
+            if (!status) return 'pendente';
+            
+            const statusLower = status.toLowerCase();
+            if (statusLower.includes('concluído') || statusLower.includes('concluido') || statusLower.includes('concluída')) {
+                return 'concluido';
+            } else if (statusLower.includes('não realizado') || statusLower.includes('nao realizado') || statusLower.includes('não realizou')) {
+                return 'nao-realizado';
+            } else {
+                return 'pendente';
+            }
+        }
+
+        // FUNÇÕES DO MODAL
+        function showPostModal(ordem, responsavel, funcao) {
+            currentOrder = ordem;
+            currentResponsavel = responsavel;
+            currentFuncao = funcao;
+            
+            // Preencher os campos da ordem (bloqueados)
+            document.getElementById('postOrdem').value = ordem;
+            document.getElementById('justifyOrdem').value = ordem;
+            
+            // Limpar outros campos
+            document.getElementById('postNick').value = '';
+            document.getElementById('postComprovacao').value = '';
+            document.getElementById('postComentario').value = '';
+            document.getElementById('justifyNick').value = '';
+            document.getElementById('justifyMotivo').value = '';
+            
+            // Esconder loadings
+            document.getElementById('postLoading').style.display = 'none';
+            document.getElementById('justifyLoading').style.display = 'none';
+            
+            // Habilitar botões
+            document.getElementById('submitPost').disabled = false;
+            document.getElementById('submitJustify').disabled = false;
+            
+            // Mostrar modal com apenas os botões de escolha
+            document.getElementById('postModal').style.display = 'flex';
+            hideAllForms();
+            
+            // Resetar botões
+            document.getElementById('btnPostar').classList.remove('active');
+            document.getElementById('btnJustificar').classList.remove('active');
+            document.getElementById('modalTitle').textContent = 'Confirmar Ação';
+            document.getElementById('modalSubtitle').textContent = 'Selecione o tipo de ação que deseja realizar';
+        }
+
+        function hideAllForms() {
+            document.getElementById('postForm').classList.remove('active');
+            document.getElementById('justifyForm').classList.remove('active');
+        }
+
+        function showPostForm() {
+            hideAllForms();
+            document.getElementById('postForm').classList.add('active');
+            document.getElementById('btnPostar').classList.add('active');
+            document.getElementById('btnJustificar').classList.remove('active');
+            document.getElementById('modalTitle').textContent = 'Postar Realização';
+            document.getElementById('modalSubtitle').textContent = 'Preencha os dados da sua realização';
+        }
+
+        function showJustifyForm() {
+            hideAllForms();
+            document.getElementById('justifyForm').classList.add('active');
+            document.getElementById('btnPostar').classList.remove('active');
+            document.getElementById('btnJustificar').classList.add('active');
+            document.getElementById('modalTitle').textContent = 'Justificar Ausência';
+            document.getElementById('modalSubtitle').textContent = 'Preencha os dados da sua justificativa';
+        }
+
+        function closeModal() {
+            document.getElementById('postModal').style.display = 'none';
+        }
+
+        // Função para enviar dados para o Google Apps Script
+        async function sendToGoogleScript(data) {
+            try {
+                const formData = new FormData();
+                
+                // Adicionar todos os dados ao FormData
+                for (const key in data) {
+                    formData.append(key, data[key]);
+                }
+
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const result = await response.text();
+                    return { success: true, message: result };
+                } else {
+                    throw new Error('Erro na resposta do servidor');
+                }
+            } catch (error) {
+                console.error('Erro ao enviar para Google Script:', error);
+                return { success: false, message: error.message };
+            }
+        }
+
+        async function submitPost() {
+            const nick = document.getElementById('postNick').value.trim();
+            const comprovacao = document.getElementById('postComprovacao').value.trim();
+            const comentario = document.getElementById('postComentario').value.trim();
+            
+            if (!nick) {
+                alert('Por favor, digite seu nick.');
+                return;
+            }
+            
+            if (!comprovacao) {
+                alert('Por favor, forneça uma comprovação.');
+                return;
+            }
+
+            // Mostrar loading e desabilitar botão
+            document.getElementById('postLoading').style.display = 'block';
+            document.getElementById('submitPost').disabled = true;
+
+            // Preparar dados para envio
+            const postData = {
+                tipo: 'postagem',
+                ordem: currentOrder,
+                nick: nick,
+                comprovacao: comprovacao,
+                comentario: comentario,
+                responsavel: currentResponsavel,
+                funcao: currentFuncao,
+                data: new Date().toLocaleString('pt-BR')
+            };
+
+            // Enviar para Google Apps Script
+            const result = await sendToGoogleScript(postData);
+
+            // Esconder loading
+            document.getElementById('postLoading').style.display = 'none';
+            document.getElementById('submitPost').disabled = false;
+
+            if (result.success) {
+                alert('Postagem enviada com sucesso!');
+                closeModal();
+                
+                // Atualizar apenas o status na tabela
+                updateTableRowStatus(currentOrder, 'concluido');
+            } else {
+                alert('Erro ao enviar postagem: ' + result.message);
+            }
+        }
+
+        async function submitJustify() {
+            const nick = document.getElementById('justifyNick').value.trim();
+            const motivo = document.getElementById('justifyMotivo').value.trim();
+            
+            if (!nick) {
+                alert('Por favor, digite seu nick.');
+                return;
+            }
+            
+            if (!motivo) {
+                alert('Por favor, descreva o motivo da justificativa.');
+                return;
+            }
+
+            // Mostrar loading e desabilitar botão
+            document.getElementById('justifyLoading').style.display = 'block';
+            document.getElementById('submitJustify').disabled = true;
+
+            // Preparar dados para envio
+            const justifyData = {
+                tipo: 'justificativa',
+                ordem: currentOrder,
+                nick: nick,
+                motivo: motivo,
+                responsavel: currentResponsavel,
+                funcao: currentFuncao,
+                data: new Date().toLocaleString('pt-BR')
+            };
+
+            // Enviar para Google Apps Script
+            const result = await sendToGoogleScript(justifyData);
+
+            // Esconder loading
+            document.getElementById('justifyLoading').style.display = 'none';
+            document.getElementById('submitJustify').disabled = false;
+
+            if (result.success) {
+                alert('Justificativa enviada com sucesso!');
+                closeModal();
+                
+                // Atualizar apenas o status na tabela
+                updateTableRowStatus(currentOrder, 'nao-realizado');
+            } else {
+                alert('Erro ao enviar justificativa: ' + result.message);
+            }
+        }
+
+        function updateTableRowStatus(ordem, status) {
+            const rows = document.querySelectorAll('#table-body tr');
+            rows.forEach(row => {
+                const ordemCell = row.querySelector('.order-code');
+                if (ordemCell && ordemCell.textContent === ordem) {
+                    const statusElement = row.querySelector('.status');
+                    
+                    if (status === 'concluido') {
+                        statusElement.textContent = 'Concluído';
+                        statusElement.className = 'status concluido';
+                    } else if (status === 'nao-realizado') {
+                        statusElement.textContent = 'Não Realizado';
+                        statusElement.className = 'status nao-realizado';
+                    }
+                }
+            });
+        }
+
+        // Reaplicar event listeners aos botões Postar
+        function reapplyPostButtonListeners() {
+            document.querySelectorAll('.post-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const ordem = this.getAttribute('data-ordem');
+                    const responsavel = this.getAttribute('data-responsavel');
+                    const funcao = this.getAttribute('data-funcao');
+                    showPostModal(ordem, responsavel, funcao);
+                });
+            });
+        }
+
+        // Event Listeners para os botões
+        document.getElementById('btn-analistas').addEventListener('click', () => {
+            loadData('analistas');
+        });
+
+        document.getElementById('btn-secretarios').addEventListener('click', () => {
+            loadData('secretarios');
+        });
+
+        // Event Listeners do Modal
+        document.getElementById('btnPostar').addEventListener('click', showPostForm);
+        document.getElementById('btnJustificar').addEventListener('click', showJustifyForm);
+        document.getElementById('closeModal').addEventListener('click', closeModal);
+        document.getElementById('cancelPost').addEventListener('click', closeModal);
+        document.getElementById('cancelJustify').addEventListener('click', closeModal);
+        document.getElementById('submitPost').addEventListener('click', submitPost);
+        document.getElementById('submitJustify').addEventListener('click', submitJustify);
+
+        // Fechar modal ao clicar fora
+        document.getElementById('postModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Inicializar
+        updateCurrentDate('analistas');
+
+        // Carregar dados dos analistas por padrão
+        loadData('analistas');
     </script>
 </body>
 </html>
