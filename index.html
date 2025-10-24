@@ -1286,8 +1286,17 @@
             document.getElementById('cancelPost').disabled = false;
 
             if (result.success) {
+                alert('Postagem enviada com sucesso! Aguarde o veredito.');
                 closeModal();
-                updateTableRowStatus(currentOrder, 'concluido');
+                
+                // EM VEZ de atualizar imediatamente, recarrega os dados da planilha
+                const activeSheetType = document.getElementById('btn-analistas').classList.contains('active') ? 'analistas' : 'secretarios';
+                
+                // Limpar o cache para forçar recarregar os dados atualizados
+                dataCache[activeSheetType] = null;
+                
+                // Recarregar os dados da planilha
+                loadData(activeSheetType);
             } else {
                 alert(`Erro ao enviar postagem: ${result.message}`);
             }
@@ -1322,37 +1331,20 @@
             document.getElementById('cancelJustify').disabled = false;
 
             if (result.success) {
+                alert('Justificativa enviada com sucesso! Aguarde o veredito.');
                 closeModal();
-                updateTableRowStatus(currentOrder, 'nao-realizado');
+                
+                // EM VEZ de atualizar imediatamente, recarrega os dados da planilha
+                const activeSheetType = document.getElementById('btn-analistas').classList.contains('active') ? 'analistas' : 'secretarios';
+                
+                // Limpar o cache para forçar recarregar os dados atualizados
+                dataCache[activeSheetType] = null;
+                
+                // Recarregar os dados da planilha
+                loadData(activeSheetType);
             } else {
                 alert(`Erro ao enviar justificativa: ${result.message}`);
             }
-        }
-
-        function updateTableRowStatus(ordem, status) {
-            const activeSheetType = document.getElementById('btn-analistas').classList.contains('active') ? 'analistas' : 'secretarios';
-            if (dataCache[activeSheetType]) {
-                const item = dataCache[activeSheetType].find(d => d.ordem === ordem);
-                if (item) {
-                    item.status = (status === 'concluido') ? 'Concluído' : 'Não Realizado';
-                }
-            }
-
-            const rows = document.querySelectorAll('#table-body tr');
-            rows.forEach(row => {
-                const ordemCell = row.querySelector('.order-code');
-                if (ordemCell && ordemCell.textContent === ordem) {
-                    const statusElement = row.querySelector('.status');
-                    
-                    if (status === 'concluido') {
-                        statusElement.textContent = 'CONCLUÍDO';
-                        statusElement.className = 'status concluido';
-                    } else if (status === 'nao-realizado') {
-                        statusElement.textContent = 'NÃO REALIZADA';
-                        statusElement.className = 'status nao-realizado';
-                    }
-                }
-            });
         }
         
         document.addEventListener('DOMContentLoaded', () => {
