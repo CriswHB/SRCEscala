@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SRC - Escala & Postagem</title>
     <style>
         * {
@@ -388,6 +388,23 @@
             box-shadow: 
                 0 4px 12px rgba(46, 139, 87, 0.2),
                 inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        /* CORREÇÃO: Status CONCLUÍDA agora em verde */
+        .concluida {
+            background: #2e8b57;
+            color: white;
+            border-color: #22663d;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            box-shadow: 
+                0 4px 12px rgba(46, 139, 87, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .concluida:hover {
+            box-shadow: 
+                0 6px 18px rgba(46, 139, 87, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
 
         /* Estilo para status JUSTIFICADA em azul */
@@ -1225,7 +1242,7 @@
             document.getElementById(`btn-${activeSheetType}`).classList.add('active');
         }
 
-        // FUNÇÕES CORRIGIDAS: Usar valores EXATOS da planilha
+        // FUNÇÕES CORRIGIDAS: Incluindo tratamento para "CONCLUÍDA"
         function getStatusClass(status) {
             if (!status) return 'pendente';
             
@@ -1236,8 +1253,8 @@
                 return 'justificada';
             } else if (statusLower === 'não realizada') {
                 return 'nao-realizado';
-            } else if (statusLower === 'concluído') {
-                return 'concluido';
+            } else if (statusLower === 'concluído' || statusLower === 'concluída') {
+                return 'concluida'; // Agora usa a classe verde
             } else {
                 return 'pendente';
             }
@@ -1251,8 +1268,8 @@
                 return 'JUSTIFICADA';
             } else if (status === 'não realizada') {
                 return 'NÃO REALIZADA';
-            } else if (status === 'concluído') {
-                return 'CONCLUÍDO';
+            } else if (status === 'concluído' || status === 'concluída') {
+                return 'CONCLUÍDA';
             } else {
                 return status.toUpperCase();
             }
