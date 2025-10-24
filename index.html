@@ -1115,7 +1115,7 @@
             document.getElementById(`btn-${activeSheetType}`).classList.add('active');
         }
 
-        // CORREÇÃO: Funções para usar os valores EXATOS da planilha
+        // FUNÇÕES CORRIGIDAS: Usar valores EXATOS da planilha
         function getStatusClass(status) {
             if (!status) return 'pendente';
             
@@ -1124,9 +1124,9 @@
             // Valores EXATOS da planilha
             if (statusLower === 'justificada') {
                 return 'justificada';
-            } else if (statusLower === 'não realizada' || statusLower === 'não realizado') {
+            } else if (statusLower === 'não realizada') {
                 return 'nao-realizado';
-            } else if (statusLower === 'concluída' || statusLower === 'concluído') {
+            } else if (statusLower === 'concluído') {
                 return 'concluido';
             } else {
                 return 'pendente';
@@ -1135,8 +1135,17 @@
 
         function getStatusText(status) {
             if (!status) return 'PENDENTE';
+            
             // Manter o texto EXATO da planilha em maiúsculas
-            return status.toUpperCase();
+            if (status === 'justificada') {
+                return 'JUSTIFICADA';
+            } else if (status === 'não realizada') {
+                return 'NÃO REALIZADA';
+            } else if (status === 'concluído') {
+                return 'CONCLUÍDO';
+            } else {
+                return status.toUpperCase();
+            }
         }
 
         function renderTable(tableData, tableBody) {
@@ -1336,7 +1345,7 @@
                     const statusElement = row.querySelector('.status');
                     
                     if (status === 'concluido') {
-                        statusElement.textContent = 'CONCLUÍDA';
+                        statusElement.textContent = 'CONCLUÍDO';
                         statusElement.className = 'status concluido';
                     } else if (status === 'nao-realizado') {
                         statusElement.textContent = 'NÃO REALIZADA';
@@ -1380,4 +1389,3 @@
     </script>
 </body>
 </html>
-
