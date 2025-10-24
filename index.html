@@ -1115,40 +1115,28 @@
             document.getElementById(`btn-${activeSheetType}`).classList.add('active');
         }
 
-        // CORRIGIDO: Função para reconhecer TODOS os status corretamente da planilha
+        // CORREÇÃO: Funções para usar os valores EXATOS da planilha
         function getStatusClass(status) {
             if (!status) return 'pendente';
             
             const statusLower = status.toLowerCase().trim();
             
-            // Verificar primeiro os status mais específicos
-            if (statusLower.includes('justificada') || statusLower.includes('justificado')) {
+            // Valores EXATOS da planilha
+            if (statusLower === 'justificada') {
                 return 'justificada';
-            } else if (statusLower.includes('não realizado') || statusLower.includes('nao realizado') || statusLower.includes('não realizou') || statusLower.includes('não realizada')) {
+            } else if (statusLower === 'não realizada' || statusLower === 'não realizado') {
                 return 'nao-realizado';
-            } else if (statusLower.includes('concluído') || statusLower.includes('concluido') || statusLower.includes('concluída') || statusLower.includes('realizado') || statusLower.includes('realizada')) {
+            } else if (statusLower === 'concluída' || statusLower === 'concluído') {
                 return 'concluido';
             } else {
                 return 'pendente';
             }
         }
 
-        // CORRIGIDO: Função para exibir o texto correto em maiúsculas
         function getStatusText(status) {
             if (!status) return 'PENDENTE';
-            
-            const statusLower = status.toLowerCase().trim();
-            
-            // Manter o texto ORIGINAL da planilha, só converter para maiúsculas
-            if (statusLower.includes('justificada') || statusLower.includes('justificado')) {
-                return 'JUSTIFICADA';
-            } else if (statusLower.includes('não realizado') || statusLower.includes('nao realizado') || statusLower.includes('não realizou') || statusLower.includes('não realizada')) {
-                return 'NÃO REALIZADA';
-            } else if (statusLower.includes('concluído') || statusLower.includes('concluido') || statusLower.includes('concluída') || statusLower.includes('realizado') || statusLower.includes('realizada')) {
-                return 'CONCLUÍDA';
-            } else {
-                return 'PENDENTE';
-            }
+            // Manter o texto EXATO da planilha em maiúsculas
+            return status.toUpperCase();
         }
 
         function renderTable(tableData, tableBody) {
@@ -1392,3 +1380,4 @@
     </script>
 </body>
 </html>
+
