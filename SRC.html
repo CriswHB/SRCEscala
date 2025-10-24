@@ -389,6 +389,23 @@
                 0 4px 12px rgba(46, 139, 87, 0.2),
                 inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
+
+        /* ADICIONADO: Estilo para status JUSTIFICADA em azul */
+        .justificada {
+            background: #3A6CD6;
+            color: white;
+            border-color: #2a4fa3; 
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            box-shadow: 
+                0 4px 12px rgba(58, 108, 214, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .justificada:hover {
+            box-shadow: 
+                0 6px 18px rgba(58, 108, 214, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
         
         .post-btn {
             background: linear-gradient(to right, #D34AA1, #3A6CD6);
@@ -1121,6 +1138,7 @@
             return dateString || '';
         }
 
+        // ATUALIZADO: Função para reconhecer status "Justificada"
         function getStatusClass(status) {
             if (!status) return 'pendente';
             
@@ -1129,6 +1147,8 @@
                 return 'concluido';
             } else if (statusLower.includes('não realizado') || statusLower.includes('nao realizado') || statusLower.includes('não realizou')) {
                 return 'nao-realizado';
+            } else if (statusLower.includes('justificada') || statusLower.includes('justificado')) {
+                return 'justificada';
             } else {
                 return 'pendente';
             }
@@ -1351,6 +1371,5 @@
     </script>
 </body>
 </html>
-
 
 
