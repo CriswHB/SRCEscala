@@ -390,7 +390,7 @@
                 inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
 
-        /* ADICIONADO: Estilo para status JUSTIFICADA em azul */
+        /* Estilo para status JUSTIFICADA em azul */
         .justificada {
             background: #3A6CD6;
             color: white;
@@ -1115,11 +1115,45 @@
             document.getElementById(`btn-${activeSheetType}`).classList.add('active');
         }
 
+        // CORRIGIDO: Função para reconhecer status "NÃO REALIZADA" corretamente
+        function getStatusClass(status) {
+            if (!status) return 'pendente';
+            
+            const statusLower = status.toLowerCase();
+            if (statusLower.includes('concluído') || statusLower.includes('concluido') || statusLower.includes('concluída')) {
+                return 'concluido';
+            } else if (statusLower.includes('não realizado') || statusLower.includes('nao realizado') || statusLower.includes('não realizou') || statusLower.includes('não realizada')) {
+                return 'nao-realizado';
+            } else if (statusLower.includes('justificada') || statusLower.includes('justificado')) {
+                return 'justificada';
+            } else {
+                return 'pendente';
+            }
+        }
+
+        // NOVA: Função para exibir o texto do status em maiúsculas
+        function getStatusText(status) {
+            if (!status) return 'PENDENTE';
+            
+            const statusLower = status.toLowerCase();
+            if (statusLower.includes('concluído') || statusLower.includes('concluido') || statusLower.includes('concluída')) {
+                return 'CONCLUÍDA';
+            } else if (statusLower.includes('não realizado') || statusLower.includes('nao realizado') || statusLower.includes('não realizou') || statusLower.includes('não realizada')) {
+                return 'NÃO REALIZADA';
+            } else if (statusLower.includes('justificada') || statusLower.includes('justificado')) {
+                return 'JUSTIFICADA';
+            } else {
+                return 'PENDENTE';
+            }
+        }
+
+        // ATUALIZADO: Renderizar tabela com status em maiúsculas
         function renderTable(tableData, tableBody) {
             tableBody.innerHTML = '';
 
             tableData.forEach(item => {
                 const statusClass = getStatusClass(item.status);
+                const statusText = getStatusText(item.status);
                 
                 const row = document.createElement('tr');
                 row.innerHTML = `
@@ -1127,7 +1161,7 @@
                     <td class="function-name">${item.funcao}</td>
                     <td class="person-name">${item.responsavel}</td>
                     <td class="data-cell">${formatDate(item.prazo)}</td>
-                    <td><span class="status ${statusClass}">${item.status || 'Pendente'}</span></td>
+                    <td><span class="status ${statusClass}">${statusText}</span></td>
                     <td><button class="post-btn" data-ordem="${item.ordem}" data-responsavel="${item.responsavel}" data-funcao="${item.funcao}">Postar</button></td>
                 `;
                 tableBody.appendChild(row);
@@ -1136,22 +1170,6 @@
 
         function formatDate(dateString) {
             return dateString || '';
-        }
-
-        // ATUALIZADO: Função para reconhecer status "Justificada"
-        function getStatusClass(status) {
-            if (!status) return 'pendente';
-            
-            const statusLower = status.toLowerCase();
-            if (statusLower.includes('concluído') || statusLower.includes('concluido') || statusLower.includes('concluída')) {
-                return 'concluido';
-            } else if (statusLower.includes('não realizado') || statusLower.includes('nao realizado') || statusLower.includes('não realizou')) {
-                return 'nao-realizado';
-            } else if (statusLower.includes('justificada') || statusLower.includes('justificado')) {
-                return 'justificada';
-            } else {
-                return 'pendente';
-            }
         }
 
         function showPostModal(ordem, responsavel, funcao) {
@@ -1327,10 +1345,10 @@
                     const statusElement = row.querySelector('.status');
                     
                     if (status === 'concluido') {
-                        statusElement.textContent = 'Concluído';
+                        statusElement.textContent = 'CONCLUÍDA';
                         statusElement.className = 'status concluido';
                     } else if (status === 'nao-realizado') {
-                        statusElement.textContent = 'Não Realizado';
+                        statusElement.textContent = 'NÃO REALIZADA';
                         statusElement.className = 'status nao-realizado';
                     }
                 }
@@ -1371,5 +1389,4 @@
     </script>
 </body>
 </html>
-
 
