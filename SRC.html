@@ -1064,24 +1064,25 @@
 
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxZ3jlkbfINUC3CY-PLLQvSC4-Wl9VcAv-Kv_S1QeBOmJzafQ1qGsoIXebmYyAl_W3d/exec';
 
+        // CONFIGURAÇÃO ATUALIZADA COM AS NOVAS ABAS E CÉLULAS
         const SHEET_CONFIG = {
             analistas: {
-                sheetName: 'Escala de Funções - Analistas',
+                sheetName: 'Escala - Analistas',
                 ranges: {
-                    ordem: ['B10', 'B13', 'B14', 'B15', 'B16', 'B17', 'B20', 'B21', 'B22'],
-                    funcao: ['E10', 'E13', 'E14', 'E15', 'E16', 'E17', 'E20', 'E21', 'E22'],
-                    responsavel: ['D10', 'D13', 'D14', 'D15', 'D16', 'D17', 'D20', 'D21', 'D22'],
-                    prazo: ['C10', 'C13', 'C14', 'C15', 'C16', 'C17', 'C20', 'C21', 'C22'],
-                    status: ['F10', 'F13', 'F14', 'F15', 'F16', 'F17', 'F20', 'F21', 'F22']
+                    ordem: ['B10', 'B11', 'B14', 'B15', 'B16', 'B17', 'B18', 'B21', 'B22', 'B23'],
+                    prazo: ['C10', 'C11', 'C14', 'C15', 'C16', 'C17', 'C18', 'C21', 'C22', 'C23'],
+                    responsavel: ['D10', 'D11', 'D14', 'D15', 'D16', 'D17', 'D18', 'D21', 'D22', 'D23'],
+                    funcao: ['E10', 'E11', 'E14', 'E15', 'E16', 'E17', 'E18', 'E21', 'E22', 'E23'],
+                    status: ['F10', 'F11', 'F14', 'F15', 'F16', 'F17', 'F18', 'F21', 'F22', 'F23']
                 }
             },
             secretarios: {
-                sheetName: 'Escala de Funções - Secretários',
+                sheetName: 'Escala - Secretários',
                 ranges: {
                     ordem: ['B8', 'B9', 'B10', 'B11', 'B12', 'B13'],
-                    funcao: ['E8', 'E9', 'E10', 'E11', 'E12', 'E13'],
-                    responsavel: ['D8', 'D9', 'D10', 'D11', 'D12', 'D13'],
                     prazo: ['C8', 'C9', 'C10', 'C11', 'C12', 'C13'],
+                    responsavel: ['D8', 'D9', 'D10', 'D11', 'D12', 'D13'],
+                    funcao: ['E8', 'E9', 'E10', 'E11', 'E12', 'E13'],
                     status: ['F8', 'F9', 'F10', 'F11', 'F12', 'F13']
                 }
             }
@@ -1192,6 +1193,8 @@
             const ranges = [];
             const cellGroups = config.ranges;
             
+            // Para analistas: 10 células (B10, B11, B14-B18, B21-B23)
+            // Para secretários: 6 células (B8-B13)
             for (let i = 0; i < cellGroups.ordem.length; i++) {
                 const rowNumber = getRowNumberFromCell(cellGroups.ordem[i]);
                 ranges.push(`${config.sheetName}!B${rowNumber}:F${rowNumber}`); 
@@ -1251,7 +1254,7 @@
             // Valores EXATOS da planilha
             if (statusLower === 'justificada') {
                 return 'justificada';
-            } else if (statusLower === 'não realizada') {
+            } else if (statusLower === 'não realizada' || statusLower === 'não realizado') {
                 return 'nao-realizado';
             } else if (statusLower === 'concluído' || statusLower === 'concluída') {
                 return 'concluida'; // Agora usa a classe verde
@@ -1266,7 +1269,7 @@
             // Manter o texto EXATO da planilha em maiúsculas
             if (status === 'justificada') {
                 return 'JUSTIFICADA';
-            } else if (status === 'não realizada') {
+            } else if (status === 'não realizada' || status === 'não realizado') {
                 return 'NÃO REALIZADA';
             } else if (status === 'concluído' || status === 'concluída') {
                 return 'CONCLUÍDA';
